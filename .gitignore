@@ -1,0 +1,6 @@
+
+*.flag
+
+firmware/h3_drv_test.X/build/
+firmware/h3_drv_test.X/debug/
+firmware/h3_drv_test.X/dist/
