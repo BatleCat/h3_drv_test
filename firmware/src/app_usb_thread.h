@@ -32,6 +32,9 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include "configuration.h"
+#include "FreeRTOS.h"
+#include "task.h"
+#include "definitions.h"
 
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility
@@ -61,10 +64,18 @@ extern "C" {
 typedef enum
 {
     /* Application's state machine's initial state. */
-    APP_USB_THREAD_STATE_INIT=0,
-    APP_USB_THREAD_STATE_SERVICE_TASKS,
     /* TODO: Define states used by the application state machine. */
-
+    APP_USB_THREAD_STATE_BUS_ENABLE=0,
+    APP_USB_THREAD_STATE_WAIT_FOR_BUS_ENABLE_COMPLITE,        
+    APP_USB_THREAD_STATE_WAIT_FOR_DEVICE_ATTACH,
+    APP_USB_THREAD_STATE_DEVICE_CONNECTED,
+    APP_USB_THREAD_STATE_MOUNT_DISK,
+    APP_USB_THREAD_STATE_UNMOUNT_DISK,
+    APP_USB_THREAD_STATE_OPEN_FILE,
+    APP_USB_THREAD_STATE_WRITE_TO_FILE,
+    APP_USB_THREAD_STATE_CLOSE_FILE,
+    APP_USB_THREAD_STATE_IDLE,
+    APP_USB_THREAD_STATE_ERROR
 } APP_USB_THREAD_STATES;
 
 
@@ -87,6 +98,18 @@ typedef struct
     APP_USB_THREAD_STATES state;
 
     /* TODO: Define any additional data used by the application. */
+    /* SYS_FS File handler for lst file */
+    SYS_FS_HANDLE fileHandle;
+    /* Application data buffer */
+    uint8_t data[1024];
+    /* Number of bytes written */
+    uint32_t nBytesWritten;
+    /* Number of bytes read */
+    uint32_t nBytesRead;
+
+    bool deviceIsConnected;
+
+    EVENT_INFO eventInfo;
 
 } APP_USB_THREAD_DATA;
 

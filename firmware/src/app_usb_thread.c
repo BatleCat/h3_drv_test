@@ -26,8 +26,12 @@
 // Section: Included Files
 // *****************************************************************************
 // *****************************************************************************
-
 #include "app_usb_thread.h"
+//------------------------------------------------------------------------------
+#include <stdio.h>
+#include "FreeRTOS.h"
+#include "task.h"
+//------------------------------------------------------------------------------
 
 // *****************************************************************************
 // *****************************************************************************
@@ -89,15 +93,48 @@ APP_USB_THREAD_DATA app_usb_threadData;
 void APP_USB_THREAD_Initialize ( void )
 {
     /* Place the App state machine in its initial state. */
-    app_usb_threadData.state = APP_USB_THREAD_STATE_INIT;
-
-
+    /* Place the App state machine in its initial state. */
+    app_usb_threadData.state = APP_USB_THREAD_STATE_BUS_ENABLE;
+    app_usb_threadData.deviceIsConnected = false;
 
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
 }
 
+USB_HOST_EVENT_RESPONSE APP_USBHostEventHandler (USB_HOST_EVENT event, void * eventData, uintptr_t context)
+{
+    switch (event)
+    {
+        case USB_HOST_EVENT_DEVICE_UNSUPPORTED:
+            break;
+        default:
+            break;
+                    
+    }
+    
+    return(USB_HOST_EVENT_RESPONSE_NONE);
+}
+
+void APP_SYSFSEventHandler(SYS_FS_EVENT event, void * eventData, uintptr_t context)
+{
+    switch(event)
+    {
+        case SYS_FS_EVENT_MOUNT:
+            app_usb_threadData.deviceIsConnected = true;
+            //LED2_On();  //?
+            
+            break;
+            
+        case SYS_FS_EVENT_UNMOUNT:
+            app_usb_threadData.deviceIsConnected = false;
+            LED2_Off();
+            break;
+            
+        default:
+            break;
+    }
+}
 
 /******************************************************************************
   Function:
@@ -109,33 +146,95 @@ void APP_USB_THREAD_Initialize ( void )
 
 void APP_USB_THREAD_Tasks ( void )
 {
+    uint8_t strlen;                        
 
     /* Check the application's current state. */
     switch ( app_usb_threadData.state )
     {
         /* Application's initial state. */
-        case APP_USB_THREAD_STATE_INIT:
+        case APP_USB_THREAD_STATE_BUS_ENABLE:
         {
-            bool appInitialized = true;
-
-
-            if (appInitialized)
-            {
-
-                app_usb_threadData.state = APP_USB_THREAD_STATE_SERVICE_TASKS;
-            }
+            SYS_FS_EventHandlerSet( (void *)APP_SYSFSEventHandler, (uintptr_t)NULL );
+            USB_HOST_EventHandlerSet(APP_USBHostEventHandler, 0);
+            USB_HOST_BusEnable(0);
+            app_usb_threadData.state = APP_USB_THREAD_STATE_WAIT_FOR_BUS_ENABLE_COMPLITE;
             break;
         }
-
-        case APP_USB_THREAD_STATE_SERVICE_TASKS:
-        {
-
-            break;
-        }
-
         /* TODO: implement your application state machine.*/
+        case APP_USB_THREAD_STATE_WAIT_FOR_BUS_ENABLE_COMPLITE:
+        {
+            if(USB_HOST_BusIsEnabled(0))
+            {
+                app_usb_threadData.state = APP_USB_THREAD_STATE_WAIT_FOR_DEVICE_ATTACH;
+            }
 
+            break;
+        }
+        case APP_USB_THREAD_STATE_WAIT_FOR_DEVICE_ATTACH:
+        {
+            if(app_usb_threadData.deviceIsConnected)
+            {
+                app_usb_threadData.state = APP_USB_THREAD_STATE_IDLE;
+            }
 
+            break;
+        }
+        case APP_USB_THREAD_STATE_DEVICE_CONNECTED:
+        {
+            /* Device was connected. We can try mounting the disk */
+            app_usb_threadData.state = APP_USB_THREAD_STATE_OPEN_FILE;
+
+            break;
+        }
+        case APP_USB_THREAD_STATE_MOUNT_DISK:
+        {
+
+            break;
+        }
+        case APP_USB_THREAD_STATE_UNMOUNT_DISK:
+        {
+
+            break;
+        }
+        case APP_USB_THREAD_STATE_OPEN_FILE:
+        {
+            /* Try opening the file for append */
+            app_usb_threadData.fileHandle = SYS_FS_FileOpen("/mnt/myDrive1/Temperature_Sensor_Data.txt", (SYS_FS_FILE_OPEN_APPEND_PLUS));
+            if(app_usb_threadData.fileHandle == SYS_FS_HANDLE_INVALID)
+            {
+                /* Could not open the file. Error out*/
+                app_usb_threadData.state = APP_STATE_ERROR;
+
+            }
+            else
+            {
+                /* File opened successfully. Write to file */
+                app_usb_threadData.state = APP_STATE_WRITE_TO_FILE;
+
+            }
+
+            break;
+        }
+        case APP_USB_THREAD_STATE_WRITE_TO_FILE:
+        {
+
+            break;
+        }
+        case APP_USB_THREAD_STATE_CLOSE_FILE:
+        {
+
+            break;
+        }
+        case APP_USB_THREAD_STATE_IDLE:
+        {
+
+            break;
+        }
+        case APP_USB_THREAD_STATE_ERROR:
+        {
+
+            break;
+        }
         /* The default state should never be executed. */
         default:
         {

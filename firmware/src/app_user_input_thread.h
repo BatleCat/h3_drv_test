@@ -87,6 +87,9 @@ typedef struct
     APP_USER_INPUT_THREAD_STATES state;
 
     /* TODO: Define any additional data used by the application. */
+    bool isInitDone;
+    DRV_HANDLE usartHandle;
+    EVENT_INFO eventInfo;
 
 } APP_USER_INPUT_THREAD_DATA;
 
