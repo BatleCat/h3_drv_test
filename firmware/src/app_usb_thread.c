@@ -56,6 +56,9 @@
 
 APP_USB_THREAD_DATA app_usb_threadData;
 
+/* This is the string that will written to the file */
+USB_ALIGN uint8_t writeData[30] = "Hello World \r\n";
+
 // *****************************************************************************
 // *****************************************************************************
 // Section: Application Callback Functions
@@ -64,6 +67,98 @@ APP_USB_THREAD_DATA app_usb_threadData;
 
 /* TODO:  Add any necessary callback functions.
 */
+/*******************************************************************************
+  Function:
+    USB_HOST_EVENT_RESPONSE APP_USBHostEventHandler (USB_HOST_EVENT event, void * eventData, uintptr_t context)
+
+  Summary:
+     MPLAB Harmony application callback function.
+
+  Description:
+    This function 
+
+  Precondition:
+    None. ?
+
+  Parameters:
+    USB_HOST_EVENT  event
+    void*           eventData
+    uintptr_t       context
+
+  Returns:
+    USB_HOST_EVENT_RESPONSE
+
+  Example:
+    <code>
+    USB_HOST_EventHandlerSet(APP_USBHostEventHandler, 0);
+    </code>
+
+  Remarks:
+    This routine must be called from 
+*/
+USB_HOST_EVENT_RESPONSE APP_USBHostEventHandler (USB_HOST_EVENT event, void * eventData, uintptr_t context)
+{
+    switch (event)
+    {
+        case USB_HOST_EVENT_DEVICE_UNSUPPORTED:
+            break;
+        default:
+            break;
+                    
+    }
+    
+    return(USB_HOST_EVENT_RESPONSE_NONE);
+}
+
+/*******************************************************************************
+  Function:
+    void APP_SYSFSEventHandler(SYS_FS_EVENT event, void * eventData, uintptr_t context)
+
+  Summary:
+     MPLAB Harmony application callback function.
+
+  Description:
+    This function 
+
+  Precondition:
+    None. ?
+
+  Parameters:
+    SYS_FS_EVENT event
+    void*        eventData
+    uintptr_t    context
+
+  Returns:
+    None.
+
+  Example:
+    <code>
+    SYS_FS_EventHandlerSet( (void *)APP_SYSFSEventHandler, (uintptr_t)NULL );
+    </code>
+
+  Remarks:
+    This routine must be called from 
+*/
+void APP_SYSFSEventHandler(SYS_FS_EVENT event, void * eventData, uintptr_t context)
+{
+    switch(event)
+    {
+        case SYS_FS_EVENT_MOUNT:
+            app_usb_threadData.deviceIsConnected = true;
+            //LED2_On();  //?
+            
+            break;
+            
+        case SYS_FS_EVENT_UNMOUNT:
+            app_usb_threadData.deviceIsConnected = false;
+            LED2_Off();
+            break;
+            
+        default:
+            break;
+    }
+}
+
 
 // *****************************************************************************
 // *****************************************************************************
@@ -89,7 +184,6 @@ APP_USB_THREAD_DATA app_usb_threadData;
   Remarks:
     See prototype in app_usb_thread.h.
  */
-
 void APP_USB_THREAD_Initialize ( void )
 {
     /* Place the App state machine in its initial state. */
@@ -100,40 +194,6 @@ void APP_USB_THREAD_Initialize ( void )
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
-}
-
-USB_HOST_EVENT_RESPONSE APP_USBHostEventHandler (USB_HOST_EVENT event, void * eventData, uintptr_t context)
-{
-    switch (event)
-    {
-        case USB_HOST_EVENT_DEVICE_UNSUPPORTED:
-            break;
-        default:
-            break;
-                    
-    }
-    
-    return(USB_HOST_EVENT_RESPONSE_NONE);
-}
-
-void APP_SYSFSEventHandler(SYS_FS_EVENT event, void * eventData, uintptr_t context)
-{
-    switch(event)
-    {
-        case SYS_FS_EVENT_MOUNT:
-            app_usb_threadData.deviceIsConnected = true;
-            //LED2_On();  //?
-            
-            break;
-            
-        case SYS_FS_EVENT_UNMOUNT:
-            app_usb_threadData.deviceIsConnected = false;
-            LED2_Off();
-            break;
-            
-        default:
-            break;
-    }
 }
 
 /******************************************************************************
@@ -203,13 +263,13 @@ void APP_USB_THREAD_Tasks ( void )
             if(app_usb_threadData.fileHandle == SYS_FS_HANDLE_INVALID)
             {
                 /* Could not open the file. Error out*/
-                app_usb_threadData.state = APP_STATE_ERROR;
+                app_usb_threadData.state = APP_USB_THREAD_STATE_ERROR;
 
             }
             else
             {
                 /* File opened successfully. Write to file */
-                app_usb_threadData.state = APP_STATE_WRITE_TO_FILE;
+                app_usb_threadData.state = APP_USB_THREAD_STATE_WRITE_TO_FILE;
 
             }
 
@@ -217,21 +277,66 @@ void APP_USB_THREAD_Tasks ( void )
         }
         case APP_USB_THREAD_STATE_WRITE_TO_FILE:
         {
-
+            /* Try writing to the file */
+            strlen = sprintf((char*)writeData, "Temperature = %d F\r\n", (uint8_t)app_usb_threadData.eventInfo.eventData);  
+            
+            if (SYS_FS_FileWrite( app_usb_threadData.fileHandle, (const void *) writeData, strlen) == -1)
+            {
+                /* Write was not successful. Close the file
+                 * and error out.*/
+                SYS_FS_FileClose(app_usb_threadData.fileHandle);
+                app_usb_threadData.state = APP_USB_THREAD_STATE_ERROR;
+            }
+            else
+            {
+                /* We are done writing. Close the file */
+                app_usb_threadData.state = APP_USB_THREAD_STATE_CLOSE_FILE;
+            }
             break;
         }
         case APP_USB_THREAD_STATE_CLOSE_FILE:
         {
-
+            /* Close the file */
+            SYS_FS_FileClose(app_usb_threadData.fileHandle);
+            /* Indicate User that File operation has been completed */
+            LED2_On(); 
+            /* The test was successful. Lets idle. */
+            app_usb_threadData.state = APP_USB_THREAD_STATE_IDLE;
             break;
         }
         case APP_USB_THREAD_STATE_IDLE:
         {
-
+            /* Wait for the temperature write request */    
+            xQueueReceive( eventQueue, &app_usb_threadData.eventInfo, portMAX_DELAY );
+            if (app_usb_threadData.eventInfo.eventType == EVENT_TYPE_TEMP_WRITE_REQ)
+            {
+                app_usb_threadData.state = APP_USB_THREAD_STATE_OPEN_FILE;
+            }
+            /* The application comes here when the demo has completed
+             * successfully. Provide LED indication. Wait for device detach
+             * and if detached, wait for attach. */
+            if(app_usb_threadData.deviceIsConnected == false)
+            {
+                app_usb_threadData.state = APP_USB_THREAD_STATE_WAIT_FOR_DEVICE_ATTACH;
+            }
             break;
         }
         case APP_USB_THREAD_STATE_ERROR:
         {
+            /* The application comes here when the demo
+             * has failed. Provide LED indication .*/
+            if(SYS_FS_Unmount("/mnt/myDrive1") != 0)
+            {
+                /* The disk could not be un mounted. Try
+                 * un mounting again untill success. */
+                app_usb_threadData.state = APP_USB_THREAD_STATE_ERROR;
+            }
+            else
+            {
+                /* UnMount was successful. Wait for device attach */
+                app_usb_threadData.state =  APP_USB_THREAD_STATE_WAIT_FOR_DEVICE_ATTACH;
+                app_usb_threadData.deviceIsConnected = false; 
+            }
 
             break;
         }

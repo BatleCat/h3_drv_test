@@ -32,6 +32,9 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include "configuration.h"
+#include "driver/usart/drv_usart.h"
+#include "FreeRTOS.h"
+#include "queue.h"
 
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility
@@ -67,6 +70,17 @@ typedef enum
 
 } APP_USER_INPUT_THREAD_STATES;
 
+typedef enum
+{
+    EVENT_TYPE_TEMP_WRITE_REQ,            
+    EVENT_TYPE_TEMP_READ_REQ,
+}EVENT_TYPE;
+
+typedef struct
+{
+    EVENT_TYPE eventType;        
+    uint32_t   eventData;    
+}EVENT_INFO;
 
 // *****************************************************************************
 /* Application Data
@@ -87,9 +101,9 @@ typedef struct
     APP_USER_INPUT_THREAD_STATES state;
 
     /* TODO: Define any additional data used by the application. */
-    bool isInitDone;
-    DRV_HANDLE usartHandle;
-    EVENT_INFO eventInfo;
+    bool        isInitDone;
+    DRV_HANDLE  usartHandle;
+    EVENT_INFO  eventInfo;
 
 } APP_USER_INPUT_THREAD_DATA;
 

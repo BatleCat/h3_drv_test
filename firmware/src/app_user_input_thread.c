@@ -51,7 +51,7 @@
 */
 
 APP_USER_INPUT_THREAD_DATA app_user_input_threadData;
-
+QueueHandle_t eventQueue;
 // *****************************************************************************
 // *****************************************************************************
 // Section: Application Callback Functions
@@ -91,11 +91,18 @@ void APP_USER_INPUT_THREAD_Initialize ( void )
     /* Place the App state machine in its initial state. */
     app_user_input_threadData.state = APP_USER_INPUT_THREAD_STATE_INIT;
 
-
-
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
+
+    /* Place the App state machine in its initial state. */
+    app_user_input_threadData.isInitDone = false;
+
+    eventQueue = xQueueCreate( 3, sizeof(EVENT_INFO) );
+    if (eventQueue == NULL)
+    {
+        /* Handle error condition. Not sufficient memory to create Queue */
+    }      
 }
 
 
@@ -109,40 +116,72 @@ void APP_USER_INPUT_THREAD_Initialize ( void )
 
 void APP_USER_INPUT_THREAD_Tasks ( void )
 {
-
-    /* Check the application's current state. */
-    switch ( app_user_input_threadData.state )
+    uint8_t usartData;   
+    
+    /* Open the drivers if not already opened */
+    if (app_user_input_threadData.isInitDone == false)
     {
-        /* Application's initial state. */
-        case APP_USER_INPUT_THREAD_STATE_INIT:
+        /* Open the USART driver to read user key press */
+        app_user_input_threadData.usartHandle = DRV_USART_Open(DRV_USART_INDEX_0, 0);
+        
+        if (app_user_input_threadData.usartHandle == DRV_HANDLE_INVALID)
         {
-            bool appInitialized = true;
-
-
-            if (appInitialized)
-            {
-
-                app_user_input_threadData.state = APP_USER_INPUT_THREAD_STATE_SERVICE_TASKS;
-            }
-            break;
-        }
-
-        case APP_USER_INPUT_THREAD_STATE_SERVICE_TASKS:
+            /* Handle Error */
+        }    
+        else
         {
-
-            break;
-        }
-
-        /* TODO: implement your application state machine.*/
-
-
-        /* The default state should never be executed. */
-        default:
-        {
-            /* TODO: Handle error in application's state machine. */
-            break;
+            /* All drivers opened successfully */
+            app_user_input_threadData.isInitDone = true;
         }
     }
+                        
+    /* Submit a blocking USART read request (user input). */    
+    if (DRV_USART_ReadBuffer(app_user_input_threadData.usartHandle, &usartData, 1 ) == true)
+    {
+        app_user_input_threadData.eventInfo.eventType = EVENT_TYPE_TEMP_READ_REQ;
+        app_user_input_threadData.eventInfo.eventData = usartData;
+
+        /* Use FreeRTOS queue to notify the EEPROM task to print the logged temperature values */
+        xQueueSend( eventQueue, &app_user_input_threadData.eventInfo, portMAX_DELAY );
+    }
+    else
+    {
+        /* Handle error condition */
+    }
+//-----------------------------------???????????????????????????????????
+//    /* Check the application's current state. */
+//    switch ( app_user_input_threadData.state )
+//    {
+//        /* Application's initial state. */
+//        case APP_USER_INPUT_THREAD_STATE_INIT:
+//        {
+//            bool appInitialized = true;
+//
+//
+//            if (appInitialized)
+//            {
+//
+//                app_user_input_threadData.state = APP_USER_INPUT_THREAD_STATE_SERVICE_TASKS;
+//            }
+//            break;
+//        }
+//
+//        case APP_USER_INPUT_THREAD_STATE_SERVICE_TASKS:
+//        {
+//
+//            break;
+//        }
+//
+//        /* TODO: implement your application state machine.*/
+//
+//
+//        /* The default state should never be executed. */
+//        default:
+//        {
+//            /* TODO: Handle error in application's state machine. */
+//            break;
+//        }
+//    }
 }
 
 

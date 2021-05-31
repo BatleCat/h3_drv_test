@@ -95,22 +95,14 @@ typedef enum
 typedef struct
 {
     /* The application's current state */
-    APP_USB_THREAD_STATES state;
-
+    APP_USB_THREAD_STATES   state;
     /* TODO: Define any additional data used by the application. */
-    /* SYS_FS File handler for lst file */
-    SYS_FS_HANDLE fileHandle;
-    /* Application data buffer */
-    uint8_t data[1024];
-    /* Number of bytes written */
-    uint32_t nBytesWritten;
-    /* Number of bytes read */
-    uint32_t nBytesRead;
-
-    bool deviceIsConnected;
-
-    EVENT_INFO eventInfo;
-
+    SYS_FS_HANDLE           fileHandle;         /* SYS_FS File handler for lst file */
+    uint8_t                 data[1024];         /* Application data buffer */
+    uint32_t                nBytesWritten;      /* Number of bytes written */
+    uint32_t                nBytesRead;         /* Number of bytes read */
+    bool                    deviceIsConnected;
+    EVENT_INFO              eventInfo;
 } APP_USB_THREAD_DATA;
 
 // *****************************************************************************
