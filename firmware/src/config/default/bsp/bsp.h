@@ -83,6 +83,9 @@
 #define SWITCH2_Get() ((PORTB >> 13) & 0x1)
 #define SWITCH2_STATE_PRESSED 0
 #define SWITCH2_STATE_RELEASED 1
+/*** VBUS Macros for VBUS_AH ***/
+#define VBUS_AH_PowerEnable() (LATBSET = (1<<5))
+#define VBUS_AH_PowerDisable() (LATBCLR = (1<<5))
 /*** VBUS Macros for VBUS_AH_RJ13 ***/
 #define VBUS_AH_RJ13_PowerEnable() (LATJSET = (1<<13))
 #define VBUS_AH_RJ13_PowerDisable() (LATJCLR = (1<<13))

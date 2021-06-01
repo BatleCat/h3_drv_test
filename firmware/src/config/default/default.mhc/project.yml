@@ -6,27 +6,27 @@ files:
   security: NON_SECURE
   type: SOURCE
   userChecksum: BD5E3766B27BA7E6172187AB755B4EEE
-- generatedChecksum: E67DB910BA9765E00F6E53AE2803694C
+- generatedChecksum: null
   logicalPath: ''
   name: app_usb_thread.c
   physicalPath: ../..
   security: NON_SECURE
   type: SOURCE
-  userChecksum: E67DB910BA9765E00F6E53AE2803694C
-- generatedChecksum: A9D9B203243500C5FDD97D6CF419FBFD
+  userChecksum: null
+- generatedChecksum: null
   logicalPath: ''
   name: app_user_input_thread.c
   physicalPath: ../..
   security: NON_SECURE
   type: SOURCE
-  userChecksum: A9D9B203243500C5FDD97D6CF419FBFD
-- generatedChecksum: 3ABA8FF9542090FD46CC4529EFB2283D
+  userChecksum: null
+- generatedChecksum: CED8B79955A5CCA2DB81BB23B863878A
   logicalPath: config/default/bsp
   name: bsp.c
   physicalPath: bsp
   security: NON_SECURE
   type: SOURCE
-  userChecksum: 3ABA8FF9542090FD46CC4529EFB2283D
+  userChecksum: CED8B79955A5CCA2DB81BB23B863878A
 - generatedChecksum: 3CE697947D04324AF92C0742ADB99409
   logicalPath: FreeRTOS/Source
   name: croutine.c
@@ -139,13 +139,13 @@ files:
   security: NON_SECURE
   type: SOURCE
   userChecksum: 37C62E5948FBE65AF85C213106DA4CDA
-- generatedChecksum: F81A00E640818EDFB9E79C9BD241AEF4
+- generatedChecksum: null
   logicalPath: ''
   name: main.c
   physicalPath: ../..
   security: NON_SECURE
   type: SOURCE
-  userChecksum: F81A00E640818EDFB9E79C9BD241AEF4
+  userChecksum: null
 - generatedChecksum: 8FDD6248506F28B32C4F5FD9AA0D9C6F
   logicalPath: config/default/osal
   name: osal_freertos.c
@@ -195,13 +195,13 @@ files:
   security: NON_SECURE
   type: SOURCE
   userChecksum: 0BC58F38E0B9AEADB36F214D291AF2EF
-- generatedChecksum: 1401CE909FE5465F931B03B592F33F72
+- generatedChecksum: 328ABBC2E18614E469D9805671CE29A1
   logicalPath: config/default/peripheral/gpio
   name: plib_gpio.c
   physicalPath: peripheral/gpio
   security: NON_SECURE
   type: SOURCE
-  userChecksum: 1401CE909FE5465F931B03B592F33F72
+  userChecksum: 328ABBC2E18614E469D9805671CE29A1
 - generatedChecksum: E929AA29555EDA747F11829EBDB1F8A6
   logicalPath: config/default/peripheral/uart
   name: plib_uart2.c
@@ -356,27 +356,27 @@ files:
   security: NON_SECURE
   type: HEADER
   userChecksum: 6AA4FBA4B9ED4676357BCC3B10E0A6D5
-- generatedChecksum: FCAF005EBB68552411692C0EDDA7759F
+- generatedChecksum: null
   logicalPath: ''
   name: app_usb_thread.h
   physicalPath: ../..
   security: NON_SECURE
   type: HEADER
-  userChecksum: FCAF005EBB68552411692C0EDDA7759F
-- generatedChecksum: 9EEEEA98D9D99A552CD0BFFBE286D455
+  userChecksum: null
+- generatedChecksum: null
   logicalPath: ''
   name: app_user_input_thread.h
   physicalPath: ../..
   security: NON_SECURE
   type: HEADER
-  userChecksum: 9EEEEA98D9D99A552CD0BFFBE286D455
-- generatedChecksum: D085E8195304979685A894AEE801E8B6
+  userChecksum: null
+- generatedChecksum: 256687BF6234F5CEDB28FA75A3AEBFF6
   logicalPath: config/default/bsp
   name: bsp.h
   physicalPath: bsp
   security: NON_SECURE
   type: HEADER
-  userChecksum: D085E8195304979685A894AEE801E8B6
+  userChecksum: 256687BF6234F5CEDB28FA75A3AEBFF6
 - generatedChecksum: D6489667EE2E73B9C1013C694A7F849D
   logicalPath: config/default
   name: configuration.h
@@ -391,13 +391,13 @@ files:
   security: NON_SECURE
   type: HEADER
   userChecksum: 799499D320508B137A1F38041909EE57
-- generatedChecksum: CE8CE59DB56EF3E90E0E9DD0F1CF71F6
+- generatedChecksum: AF206FAD8017199F2CD89630FC5701E6
   logicalPath: config/default
   name: definitions.h
   physicalPath: ''
   security: NON_SECURE
   type: HEADER
-  userChecksum: CE8CE59DB56EF3E90E0E9DD0F1CF71F6
+  userChecksum: AF206FAD8017199F2CD89630FC5701E6
 - generatedChecksum: A87B8720A7388B92787B15BFE92911FB
   logicalPath: FreeRTOS/Source/include
   name: deprecated_definitions.h
@@ -1105,13 +1105,13 @@ files:
   security: NON_SECURE
   type: HEADER
   userChecksum: A0803FFCE7DA932883C0B89AD48FA04C
-- generatedChecksum: 4B3C3EF8A318908A22B78500515C3288
+- generatedChecksum: null
   logicalPath: config/default
   name: user.h
   physicalPath: ''
   security: NON_SECURE
   type: HEADER
-  userChecksum: 4B3C3EF8A318908A22B78500515C3288
+  userChecksum: null
 - generatedChecksum: C734E3299D476FDDB140E61BA3B5C31B
   logicalPath: config/default
   name: p32MZ2048EFH144.ld

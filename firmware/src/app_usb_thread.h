@@ -36,6 +36,7 @@
 #include "task.h"
 #include "definitions.h"
 
+#include "app_user_input_thread.h"
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility
 

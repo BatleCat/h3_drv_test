@@ -58,7 +58,7 @@ APP_USB_THREAD_DATA app_usb_threadData;
 
 /* This is the string that will written to the file */
 USB_ALIGN uint8_t writeData[30] = "Hello World \r\n";
-
+extern QueueHandle_t eventQueue;
 // *****************************************************************************
 // *****************************************************************************
 // Section: Application Callback Functions
@@ -186,7 +186,6 @@ void APP_SYSFSEventHandler(SYS_FS_EVENT event, void * eventData, uintptr_t conte
  */
 void APP_USB_THREAD_Initialize ( void )
 {
-    /* Place the App state machine in its initial state. */
     /* Place the App state machine in its initial state. */
     app_usb_threadData.state = APP_USB_THREAD_STATE_BUS_ENABLE;
     app_usb_threadData.deviceIsConnected = false;

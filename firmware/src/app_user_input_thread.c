@@ -26,8 +26,11 @@
 // Section: Included Files
 // *****************************************************************************
 // *****************************************************************************
-
 #include "app_user_input_thread.h"
+//------------------------------------------------------------------------------
+#include <stdio.h>
+#include <string.h>
+//------------------------------------------------------------------------------
 
 // *****************************************************************************
 // *****************************************************************************
@@ -132,13 +135,16 @@ void APP_USER_INPUT_THREAD_Tasks ( void )
         {
             /* All drivers opened successfully */
             app_user_input_threadData.isInitDone = true;
+            uint8_t writeData[30] = "Hello World \r\n";
+            sprintf((char*)writeData, "USART init ok \r\n");
+            DRV_USART_WriteBuffer(app_user_input_threadData.usartHandle, &writeData, strlen((const char*)writeData));
         }
     }
                         
     /* Submit a blocking USART read request (user input). */    
     if (DRV_USART_ReadBuffer(app_user_input_threadData.usartHandle, &usartData, 1 ) == true)
     {
-        app_user_input_threadData.eventInfo.eventType = EVENT_TYPE_TEMP_READ_REQ;
+        app_user_input_threadData.eventInfo.eventType = EVENT_TYPE_TEMP_WRITE_REQ;//EVENT_TYPE_TEMP_READ_REQ;
         app_user_input_threadData.eventInfo.eventData = usartData;
 
         /* Use FreeRTOS queue to notify the EEPROM task to print the logged temperature values */
