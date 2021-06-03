@@ -101,11 +101,13 @@ typedef struct
 
     /* TODO: Define any additional data used by the application. */
     bool        isInitDone;
+    uint8_t     usartWriteData[80];
     DRV_HANDLE  usartHandle;
     EVENT_INFO  eventInfo;
 
 } APP_USER_INPUT_THREAD_DATA;
-
+//------------------------------------------------------------------------------
+extern QueueHandle_t eventQueue;
 // *****************************************************************************
 // *****************************************************************************
 // Section: Application Callback Routines

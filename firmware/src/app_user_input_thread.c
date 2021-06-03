@@ -125,7 +125,7 @@ void APP_USER_INPUT_THREAD_Tasks ( void )
     if (app_user_input_threadData.isInitDone == false)
     {
         /* Open the USART driver to read user key press */
-        app_user_input_threadData.usartHandle = DRV_USART_Open(DRV_USART_INDEX_0, 0);
+        app_user_input_threadData.usartHandle = DRV_USART_Open(DRV_USART_INDEX_0, DRV_IO_INTENT_READWRITE);
         
         if (app_user_input_threadData.usartHandle == DRV_HANDLE_INVALID)
         {
@@ -135,14 +135,16 @@ void APP_USER_INPUT_THREAD_Tasks ( void )
         {
             /* All drivers opened successfully */
             app_user_input_threadData.isInitDone = true;
-            uint8_t writeData[30] = "Hello World \r\n";
-            sprintf((char*)writeData, "USART init ok \r\n");
-            DRV_USART_WriteBuffer(app_user_input_threadData.usartHandle, &writeData, strlen((const char*)writeData));
+            
+            sprintf((char*)app_user_input_threadData.usartWriteData, "User input thread: USART init ok \r\n");
+            DRV_USART_WriteBuffer( app_user_input_threadData.usartHandle, 
+                                   app_user_input_threadData.usartWriteData, 
+                                   strlen( (const char*)app_user_input_threadData.usartWriteData ) );
         }
     }
                         
     /* Submit a blocking USART read request (user input). */    
-    if (DRV_USART_ReadBuffer(app_user_input_threadData.usartHandle, &usartData, 1 ) == true)
+    if ( DRV_USART_ReadBuffer( app_user_input_threadData.usartHandle, &usartData, 1 ) == true )
     {
         app_user_input_threadData.eventInfo.eventType = EVENT_TYPE_TEMP_WRITE_REQ;//EVENT_TYPE_TEMP_READ_REQ;
         app_user_input_threadData.eventInfo.eventData = usartData;

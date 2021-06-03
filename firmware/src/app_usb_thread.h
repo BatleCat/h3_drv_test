@@ -35,8 +35,9 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "definitions.h"
-
+//------------------------------------------------------------------------------
 #include "app_user_input_thread.h"
+//------------------------------------------------------------------------------
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility
 
@@ -103,6 +104,8 @@ typedef struct
     uint32_t                nBytesWritten;      /* Number of bytes written */
     uint32_t                nBytesRead;         /* Number of bytes read */
     bool                    deviceIsConnected;
+    uint8_t                 usartWriteData[80];
+    DRV_HANDLE              usartHandle;
     EVENT_INFO              eventInfo;
 } APP_USB_THREAD_DATA;
 

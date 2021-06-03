@@ -29,6 +29,8 @@
 #include "app_usb_thread.h"
 //------------------------------------------------------------------------------
 #include <stdio.h>
+#include <string.h>
+//------------------------------------------------------------------------------
 #include "FreeRTOS.h"
 #include "task.h"
 //------------------------------------------------------------------------------
@@ -58,7 +60,7 @@ APP_USB_THREAD_DATA app_usb_threadData;
 
 /* This is the string that will written to the file */
 USB_ALIGN uint8_t writeData[30] = "Hello World \r\n";
-extern QueueHandle_t eventQueue;
+
 // *****************************************************************************
 // *****************************************************************************
 // Section: Application Callback Functions
@@ -193,6 +195,19 @@ void APP_USB_THREAD_Initialize ( void )
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
+    app_usb_threadData.usartHandle = DRV_USART_Open(DRV_USART_INDEX_0, DRV_IO_INTENT_WRITE);
+    if (app_usb_threadData.usartHandle == DRV_HANDLE_INVALID)
+    {
+        /* Handle Error */
+    }    
+    else
+    {
+        /* All drivers opened successfully */
+        sprintf((char*)app_usb_threadData.usartWriteData, "USB thread: USART init ok \r\n");
+        DRV_USART_WriteBuffer( app_usb_threadData.usartHandle, 
+                               app_usb_threadData.usartWriteData, 
+                               strlen( (const char*)app_usb_threadData.usartWriteData ) );
+    }
 }
 
 /******************************************************************************
