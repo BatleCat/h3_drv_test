@@ -189,25 +189,12 @@ void APP_SYSFSEventHandler(SYS_FS_EVENT event, void * eventData, uintptr_t conte
 void APP_USB_THREAD_Initialize ( void )
 {
     /* Place the App state machine in its initial state. */
-    app_usb_threadData.state = APP_USB_THREAD_STATE_BUS_ENABLE;
+    app_usb_threadData.state = APP_USB_THREAD_STATE_INIT;
     app_usb_threadData.deviceIsConnected = false;
 
     /* TODO: Initialize your application's state machine and other
      * parameters.
      */
-    app_usb_threadData.usartHandle = DRV_USART_Open(DRV_USART_INDEX_0, DRV_IO_INTENT_WRITE);
-    if (app_usb_threadData.usartHandle == DRV_HANDLE_INVALID)
-    {
-        /* Handle Error */
-    }    
-    else
-    {
-        /* All drivers opened successfully */
-        sprintf((char*)app_usb_threadData.usartWriteData, "USB thread: USART init ok \r\n");
-        DRV_USART_WriteBuffer( app_usb_threadData.usartHandle, 
-                               app_usb_threadData.usartWriteData, 
-                               strlen( (const char*)app_usb_threadData.usartWriteData ) );
-    }
 }
 
 /******************************************************************************
@@ -226,6 +213,28 @@ void APP_USB_THREAD_Tasks ( void )
     switch ( app_usb_threadData.state )
     {
         /* Application's initial state. */
+        case APP_USB_THREAD_STATE_INIT:
+        {
+//            if ( DRV_USART_Status(sysObj.drvUsart0) == SYS_STATUS_READY )
+            {
+                app_usb_threadData.usartHandle = DRV_USART_Open(DRV_USART_INDEX_0, DRV_IO_INTENT_WRITE);
+                if (app_usb_threadData.usartHandle == DRV_HANDLE_INVALID)
+                {
+                    /* Handle Error */
+                }    
+                else
+                {
+                    /* All drivers opened successfully */
+                    app_usb_threadData.state = APP_USB_THREAD_STATE_BUS_ENABLE;
+                    strlen = sprintf((char*)app_usb_threadData.usartWriteData, "USB thread: USART init ok \r\n");
+                    DRV_USART_WriteBuffer( app_usb_threadData.usartHandle, 
+                                           app_usb_threadData.usartWriteData, 
+                                           strlen );
+                }
+            }
+            
+        }
+        /* TODO: implement your application state machine.*/
         case APP_USB_THREAD_STATE_BUS_ENABLE:
         {
             SYS_FS_EventHandlerSet( (void *)APP_SYSFSEventHandler, (uintptr_t)NULL );
@@ -234,7 +243,6 @@ void APP_USB_THREAD_Tasks ( void )
             app_usb_threadData.state = APP_USB_THREAD_STATE_WAIT_FOR_BUS_ENABLE_COMPLITE;
             break;
         }
-        /* TODO: implement your application state machine.*/
         case APP_USB_THREAD_STATE_WAIT_FOR_BUS_ENABLE_COMPLITE:
         {
             if(USB_HOST_BusIsEnabled(0))

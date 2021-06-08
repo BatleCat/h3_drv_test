@@ -67,7 +67,8 @@ typedef enum
 {
     /* Application's state machine's initial state. */
     /* TODO: Define states used by the application state machine. */
-    APP_USB_THREAD_STATE_BUS_ENABLE=0,
+    APP_USB_THREAD_STATE_INIT = 0,
+    APP_USB_THREAD_STATE_BUS_ENABLE,
     APP_USB_THREAD_STATE_WAIT_FOR_BUS_ENABLE_COMPLITE,        
     APP_USB_THREAD_STATE_WAIT_FOR_DEVICE_ATTACH,
     APP_USB_THREAD_STATE_DEVICE_CONNECTED,

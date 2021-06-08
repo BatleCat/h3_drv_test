@@ -30,6 +30,7 @@
 //------------------------------------------------------------------------------
 #include <stdio.h>
 #include <string.h>
+#include <bsp/bsp.h>
 //------------------------------------------------------------------------------
 
 // *****************************************************************************
@@ -92,7 +93,7 @@ QueueHandle_t eventQueue;
 void APP_USER_INPUT_THREAD_Initialize ( void )
 {
     /* Place the App state machine in its initial state. */
-    app_user_input_threadData.state = APP_USER_INPUT_THREAD_STATE_INIT;
+//    app_user_input_threadData.state = APP_USER_INPUT_THREAD_STATE_INIT;
 
     /* TODO: Initialize your application's state machine and other
      * parameters.
@@ -104,6 +105,7 @@ void APP_USER_INPUT_THREAD_Initialize ( void )
     eventQueue = xQueueCreate( 3, sizeof(EVENT_INFO) );
     if (eventQueue == NULL)
     {
+        LED1_On();
         /* Handle error condition. Not sufficient memory to create Queue */
     }      
 }
@@ -119,42 +121,50 @@ void APP_USER_INPUT_THREAD_Initialize ( void )
 
 void APP_USER_INPUT_THREAD_Tasks ( void )
 {
-    uint8_t usartData;   
+//    uint8_t usartData;   
     
     /* Open the drivers if not already opened */
     if (app_user_input_threadData.isInitDone == false)
     {
         /* Open the USART driver to read user key press */
-        app_user_input_threadData.usartHandle = DRV_USART_Open(DRV_USART_INDEX_0, DRV_IO_INTENT_READWRITE);
-        
-        if (app_user_input_threadData.usartHandle == DRV_HANDLE_INVALID)
+//        if ( DRV_USART_Status(sysObj.drvUsart0) == SYS_STATUS_READY )
         {
-            /* Handle Error */
-        }    
-        else
-        {
-            /* All drivers opened successfully */
-            app_user_input_threadData.isInitDone = true;
+            // This means the driver can be opened using the
+            app_user_input_threadData.usartHandle = DRV_USART_Open(DRV_USART_INDEX_0, DRV_IO_INTENT_READWRITE);
             
-            sprintf((char*)app_user_input_threadData.usartWriteData, "User input thread: USART init ok \r\n");
-            DRV_USART_WriteBuffer( app_user_input_threadData.usartHandle, 
-                                   app_user_input_threadData.usartWriteData, 
-                                   strlen( (const char*)app_user_input_threadData.usartWriteData ) );
-        }
-    }
-                        
-    /* Submit a blocking USART read request (user input). */    
-    if ( DRV_USART_ReadBuffer( app_user_input_threadData.usartHandle, &usartData, 1 ) == true )
-    {
-        app_user_input_threadData.eventInfo.eventType = EVENT_TYPE_TEMP_WRITE_REQ;//EVENT_TYPE_TEMP_READ_REQ;
-        app_user_input_threadData.eventInfo.eventData = usartData;
+            if (app_user_input_threadData.usartHandle == DRV_HANDLE_INVALID)
+            {
+                /* Handle Error */
+                LED3_On();
+            }    
+            else
+            {
+                /* All drivers opened successfully */
+                app_user_input_threadData.isInitDone = true;
 
-        /* Use FreeRTOS queue to notify the EEPROM task to print the logged temperature values */
-        xQueueSend( eventQueue, &app_user_input_threadData.eventInfo, portMAX_DELAY );
+                uint8_t strlen = sprintf((char*)app_user_input_threadData.usartWriteData, "User input thread: USART init ok \r\n");
+                DRV_USART_WriteBuffer( app_user_input_threadData.usartHandle, 
+                                       app_user_input_threadData.usartWriteData, 
+                                       strlen );
+            }
+        }
     }
     else
     {
-        /* Handle error condition */
+//        /* Submit a blocking USART read request (user input). */    
+//        if ( DRV_USART_ReadBuffer( app_user_input_threadData.usartHandle, &usartData, 1 ) == true )
+//        {
+//            app_user_input_threadData.eventInfo.eventType = EVENT_TYPE_TEMP_WRITE_REQ;//EVENT_TYPE_TEMP_READ_REQ;
+//            app_user_input_threadData.eventInfo.eventData = usartData;
+//
+//            /* Use FreeRTOS queue to notify the EEPROM task to print the logged temperature values */
+//            xQueueSend( eventQueue, &app_user_input_threadData.eventInfo, portMAX_DELAY );
+//            LED2_Toggle();
+//        }
+//        else
+//        {
+//            /* Handle error condition */
+//        }
     }
 //-----------------------------------???????????????????????????????????
 //    /* Check the application's current state. */
