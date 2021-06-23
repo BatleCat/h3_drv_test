@@ -34,6 +34,7 @@
 #include "driver/usart/drv_usart.h"
 #include "FreeRTOS.h"
 #include "queue.h"
+#include "timers.h"
 
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility
@@ -101,10 +102,11 @@ typedef struct
 
     /* TODO: Define any additional data used by the application. */
     bool        isInitDone;
-    uint8_t     usartWriteData[80];
-    DRV_HANDLE  usartHandle;
+//    uint8_t     usartWriteData[80];
+//    DRV_HANDLE  usartHandle;
     EVENT_INFO  eventInfo;
-
+    
+    TimerHandle_t xUsartTimer;
 } APP_USER_INPUT_THREAD_DATA;
 //------------------------------------------------------------------------------
 extern QueueHandle_t eventQueue;

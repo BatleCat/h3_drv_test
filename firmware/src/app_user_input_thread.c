@@ -31,6 +31,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <bsp/bsp.h>
+#include "config/default/system/debug/sys_debug.h"
 //------------------------------------------------------------------------------
 
 // *****************************************************************************
@@ -74,6 +75,35 @@ QueueHandle_t eventQueue;
 
 /* TODO:  Add any necessary local functions.
 */
+// *****************************************************************************
+/* Define a callback function that will be used by multiple timer
+ instances.  The callback function does nothing but count the number
+ of times the associated timer expires, and stop the timer once the
+ timer has expired 10 times.  The count is saved as the ID of the
+ timer. */
+void vTimerCallback( TimerHandle_t xTimer )
+{
+    uint32_t ulCount;
+
+    LED1_Toggle();
+
+    /* Optionally do something if the pxTimer parameter is NULL. */
+    configASSERT( xTimer );
+
+    /* The number of times this timer has expired is saved as the
+    timer's ID.  Obtain the count. */
+    ulCount = ( uint32_t ) pvTimerGetTimerID( xTimer );
+
+    /* Increment the count, then test to see if the timer has expired
+    ulMaxExpiryCountBeforeStopping yet. */
+    ulCount++;
+
+    /* Store the incremented count back into the timer's ID field
+    so it can be read back again the next time this software timer
+    expires. */
+    vTimerSetTimerID( xTimer, ( void * ) ulCount );
+}
+// *****************************************************************************
 
 
 // *****************************************************************************
@@ -107,10 +137,33 @@ void APP_USER_INPUT_THREAD_Initialize ( void )
     {
         LED1_On();
         /* Handle error condition. Not sufficient memory to create Queue */
-    }      
+    }
+    
+    app_user_input_threadData.xUsartTimer = xTimerCreate( 
+                                                         "USART_App Timer",     /* Just a text name, not used by the RTOS kernel. */
+                                                         100000000, //pdMS_TO_TICKS( 500 ),  /* The timer period in ticks, must be greater than 0. */
+                                                         pdTRUE,                /* The timers will auto-reload themselves when they expire. */
+                                                         ( void * ) 0,          /* The ID is used to store a count of the number of times the timer has expired, which is initialised to 0. */
+                                                         vTimerCallback         /* Each timer calls the same callback when it expires. */
+                                                        );
+
+    if( app_user_input_threadData.xUsartTimer == NULL )
+    {
+         /* The timer was not created. */
+    }
+    else
+    {
+        /* Start the timer.  No block time is specified, and
+        even if one was it would be ignored because the RTOS
+        scheduler has not yet been started. */
+        if( xTimerStart( app_user_input_threadData.xUsartTimer, 0 ) != pdPASS )
+        {
+            /* The timer could not be set into the Active
+            state. */
+        }
+    }
+
 }
-
-
 /******************************************************************************
   Function:
     void APP_USER_INPUT_THREAD_Tasks ( void )
@@ -126,27 +179,33 @@ void APP_USER_INPUT_THREAD_Tasks ( void )
     /* Open the drivers if not already opened */
     if (app_user_input_threadData.isInitDone == false)
     {
+        SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG,"User input thread: USART init ok \r\n");
+        app_user_input_threadData.isInitDone = true;
         /* Open the USART driver to read user key press */
 //        if ( DRV_USART_Status(sysObj.drvUsart0) == SYS_STATUS_READY )
         {
-            // This means the driver can be opened using the
-            app_user_input_threadData.usartHandle = DRV_USART_Open(DRV_USART_INDEX_0, DRV_IO_INTENT_READWRITE);
-            
-            if (app_user_input_threadData.usartHandle == DRV_HANDLE_INVALID)
-            {
-                /* Handle Error */
-                LED3_On();
-            }    
-            else
-            {
-                /* All drivers opened successfully */
-                app_user_input_threadData.isInitDone = true;
-
-                uint8_t strlen = sprintf((char*)app_user_input_threadData.usartWriteData, "User input thread: USART init ok \r\n");
-                DRV_USART_WriteBuffer( app_user_input_threadData.usartHandle, 
-                                       app_user_input_threadData.usartWriteData, 
-                                       strlen );
-            }
+//            // This means the driver can be opened using the
+//            app_user_input_threadData.usartHandle = DRV_USART_Open(DRV_USART_INDEX_0, DRV_IO_INTENT_READWRITE);
+//            
+//            if (app_user_input_threadData.usartHandle == DRV_HANDLE_INVALID)
+//            {
+//                /* Handle Error */
+//                LED3_On();
+//            }    
+//            else
+//            {
+//                LED2_On();
+//                /* All drivers opened successfully */
+//                app_user_input_threadData.isInitDone = true;
+//
+//                uint8_t str_len = sprintf((char*)app_user_input_threadData.usartWriteData, "User input thread: USART init ok \r\n");
+////                sprintf((char*)app_user_input_threadData.usartWriteData, "User input thread: USART init ok \r\n");
+//                bool bres = DRV_USART_WriteBuffer( app_user_input_threadData.usartHandle, 
+//                                       app_user_input_threadData.usartWriteData, 
+//                                       str_len);
+////                                       strlen((char*)app_user_input_threadData.usartWriteData) );
+//                if (bres == true) LED1_On();
+//            }
         }
     }
     else

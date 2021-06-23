@@ -51,6 +51,7 @@
 #include "usb/usb_msd.h"
 #include "usb/usb_host_msd.h"
 #include "usb/usb_host_scsi.h"
+#include "system/command/sys_command.h"
 #include "peripheral/clk/plib_clk.h"
 #include "peripheral/gpio/plib_gpio.h"
 #include "peripheral/cache/plib_cache.h"
@@ -62,18 +63,19 @@
 #include "usb/usb_chapter_9.h"
 #include "usb/usb_host.h"
 #include "peripheral/uart/plib_uart2.h"
-#include "driver/usart/drv_usart.h"
 #include "system/fs/sys_fs.h"
 #include "system/fs/sys_fs_media_manager.h"
 #include "system/fs/sys_fs_fat_interface.h"
 #include "system/fs/fat_fs/file_system/ff.h"
 #include "system/fs/fat_fs/file_system/ffconf.h"
 #include "system/fs/fat_fs/hardware_access/diskio.h"
+#include "system/console/sys_console.h"
+#include "system/console/src/sys_console_uart_definitions.h"
 #include "FreeRTOS.h"
 #include "task.h"
 #include "system/int/sys_int.h"
 #include "system/cache/sys_cache.h"
-#include "system/dma/sys_dma.h"
+#include "system/reset/sys_reset.h"
 #include "osal/osal.h"
 #include "system/debug/sys_debug.h"
 #include "app_usb_thread.h"
@@ -202,11 +204,14 @@ Remarks:
 
 typedef struct
 {
+    SYS_MODULE_OBJ  sysDebug;
+
     SYS_MODULE_OBJ  sysTime;
-    SYS_MODULE_OBJ  drvUsart0;
 	SYS_MODULE_OBJ  drvUSBHSObject;
 
 	SYS_MODULE_OBJ  usbHostObject0;
+
+    SYS_MODULE_OBJ  sysConsole0;
 
 
 } SYSTEM_OBJECTS;

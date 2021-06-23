@@ -80,8 +80,6 @@ typedef enum
     APP_USB_THREAD_STATE_IDLE,
     APP_USB_THREAD_STATE_ERROR
 } APP_USB_THREAD_STATES;
-
-
 // *****************************************************************************
 /* Application Data
 
@@ -94,7 +92,7 @@ typedef enum
   Remarks:
     Application strings and buffers are be defined outside this structure.
  */
-
+//-----------------------------------------------------------------------------
 typedef struct
 {
     /* The application's current state */
@@ -105,11 +103,11 @@ typedef struct
     uint32_t                nBytesWritten;      /* Number of bytes written */
     uint32_t                nBytesRead;         /* Number of bytes read */
     bool                    deviceIsConnected;
-    uint8_t                 usartWriteData[80];
-    DRV_HANDLE              usartHandle;
+    uint8_t                 writeData[80];
+//    uint8_t                 usartWriteData[80];
+//    DRV_HANDLE              usartHandle;
     EVENT_INFO              eventInfo;
 } APP_USB_THREAD_DATA;
-
 // *****************************************************************************
 // *****************************************************************************
 // Section: Application Callback Routines
@@ -156,7 +154,6 @@ typedef struct
 */
 
 void APP_USB_THREAD_Initialize ( void );
-
 
 /*******************************************************************************
   Function:

@@ -1,22 +1,25 @@
 /*******************************************************************************
-  UART2 PLIB
+  Debug System Service Implementation
 
   Company:
     Microchip Technology Inc.
 
   File Name:
-    plib_uart2.h
+    sys_debug.c
 
   Summary:
-    UART2 PLIB Header File
+    Debug System Service interface implementation.
 
   Description:
-    None
-
+    The DEBUG system service provides a simple interface to manage the DEBUG
+    module on Microchip microcontrollers. This file Implements the core
+    interface routines for the DEBUG system service. While building the system
+    service from source, ALWAYS include this file in the build.
 *******************************************************************************/
 
+//DOM-IGNORE-BEGIN
 /*******************************************************************************
-* Copyright (C) 2019 Microchip Technology Inc. and its subsidiaries.
+* Copyright (C) 2018 Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -37,74 +40,73 @@
 * ANY WAY RELATED TO THIS SOFTWARE WILL NOT EXCEED THE AMOUNT OF FEES, IF ANY,
 * THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
 *******************************************************************************/
-
-#ifndef PLIB_UART2_H
-#define PLIB_UART2_H
-
-#include <stddef.h>
-#include <stdbool.h>
-#include <stdint.h>
-#include "device.h"
-#include "plib_uart_common.h"
-
-// DOM-IGNORE-BEGIN
-#ifdef __cplusplus  // Provide C++ Compatibility
-
-    extern "C" {
-
-#endif
-// DOM-IGNORE-END
+//DOM-IGNORE-END
 
 // *****************************************************************************
 // *****************************************************************************
-// Section: Interface
+// Section: Included Files
 // *****************************************************************************
 // *****************************************************************************
 
-#define UART2_FrequencyGet()    (uint32_t)(100000000UL)
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdarg.h>
+#include "configuration.h"
+#include "system/system.h"
+#include "system/console/sys_console.h"
+#include "sys_debug_local.h"
+#include "system/debug/sys_debug.h"
 
-/****************************** UART2 API *********************************/
+static SYS_DEBUG_INSTANCE sysDebugInstance;
 
-void UART2_Initialize( void );
+SYS_ERROR_LEVEL gblErrLvl;
 
-bool UART2_SerialSetup( UART_SERIAL_SETUP *setup, uint32_t srcClkFreq );
+SYS_MODULE_OBJ SYS_DEBUG_Initialize(
+    const SYS_MODULE_INDEX index,
+    const SYS_MODULE_INIT* const init
+)
+{
+    SYS_DEBUG_INIT* initConfig = (SYS_DEBUG_INIT*)init;
 
-UART_ERROR UART2_ErrorGet( void );
+    gblErrLvl = initConfig->errorLevel;
 
-size_t UART2_Write(uint8_t* pWrBuffer, const size_t size );
+    sysDebugInstance.debugConsole = initConfig->consoleIndex;
+    sysDebugInstance.status = SYS_STATUS_READY;
 
-size_t UART2_WriteCountGet(void);
+    return SYS_MODULE_OBJ_STATIC;
+}
 
-size_t UART2_WriteFreeBufferCountGet(void);
 
-size_t UART2_WriteBufferSizeGet(void);
+SYS_MODULE_INDEX SYS_DEBUG_ConsoleInstanceGet(void)
+{
+    return sysDebugInstance.debugConsole;
+}
 
-bool UART2_WriteNotificationEnable(bool isEnabled, bool isPersistent);
+SYS_STATUS SYS_DEBUG_Status ( SYS_MODULE_OBJ object )
+{
+    return ( sysDebugInstance.status );
+}
 
-void UART2_WriteThresholdSet(uint32_t nBytesThreshold);
+void SYS_DEBUG_ErrorLevelSet(SYS_ERROR_LEVEL level)
+{
+    gblErrLvl = level;
+}
 
-void UART2_WriteCallbackRegister( UART_RING_BUFFER_CALLBACK callback, uintptr_t context);
+SYS_ERROR_LEVEL SYS_DEBUG_ErrorLevelGet(void)
+{
+    return gblErrLvl;
+}
 
-size_t UART2_Read(uint8_t* pRdBuffer, const size_t size);
-
-size_t UART2_ReadCountGet(void);
-
-size_t UART2_ReadFreeBufferCountGet(void);
-
-size_t UART2_ReadBufferSizeGet(void);
-
-bool UART2_ReadNotificationEnable(bool isEnabled, bool isPersistent);
-
-void UART2_ReadThresholdSet(uint32_t nBytesThreshold);
-
-void UART2_ReadCallbackRegister( UART_RING_BUFFER_CALLBACK callback, uintptr_t context);
-
-// DOM-IGNORE-BEGIN
-#ifdef __cplusplus  // Provide C++ Compatibility
-
+bool SYS_DEBUG_Redirect(const SYS_MODULE_INDEX index)
+{
+    if (index < SYS_CONSOLE_DEVICE_MAX_INSTANCES)
+    {
+        sysDebugInstance.debugConsole = index;
+        return true;
     }
-
-#endif
-// DOM-IGNORE-END
-
-#endif // PLIB_UART2_H
+    else
+    {
+        return false;
+    }
+}

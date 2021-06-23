@@ -67,55 +67,19 @@ children:
         - type: Pairs
           children:
           - type: Pair
-            attributes: {description: 'TRUE', value: '2', key: ENABLE_DRV_COMMON}
+            attributes: {description: 'TRUE', value: '4', key: ENABLE_DRV_COMMON}
           - type: Pair
-            attributes: {description: 'TRUE', value: '3', key: ENABLE_SYS_COMMON}
+            attributes: {description: 'TRUE', value: '5', key: ENABLE_SYS_COMMON}
           - type: Pair
             attributes: {description: 'TRUE', value: '1', key: ENABLE_SYS_MEDIA}
           - type: Pair
             attributes: {description: 'FALSE', value: '0', key: ENABLE_SYS_PORTS}
           - type: Pair
-            attributes: {description: 'TRUE', value: '1', key: ENABLE_SYS_DMA}
+            attributes: {description: 'TRUE', value: '0', key: ENABLE_SYS_DMA}
           - type: Pair
-            attributes: {description: 'FALSE', value: '0', key: ENABLE_SYS_RESET}
+            attributes: {description: 'TRUE', value: '1', key: ENABLE_SYS_RESET}
   - type: File
     attributes: {id: CONFIGURATION_H}
-    children:
-    - type: Attributes
-      children:
-      - type: Boolean
-        attributes: {id: enabled}
-        children:
-        - {type: Value, value: 'true'}
-  - type: File
-    attributes: {id: DMA_DEF}
-    children:
-    - type: Attributes
-      children:
-      - type: Boolean
-        attributes: {id: enabled}
-        children:
-        - {type: Value, value: 'true'}
-  - type: File
-    attributes: {id: DMA_HEADER}
-    children:
-    - type: Attributes
-      children:
-      - type: Boolean
-        attributes: {id: enabled}
-        children:
-        - {type: Value, value: 'true'}
-  - type: File
-    attributes: {id: DMA_MAPPING}
-    children:
-    - type: Attributes
-      children:
-      - type: Boolean
-        attributes: {id: enabled}
-        children:
-        - {type: Value, value: 'true'}
-  - type: File
-    attributes: {id: DMA_SOURCE}
     children:
     - type: Attributes
       children:
@@ -191,6 +155,20 @@ children:
   - type: Boolean
     attributes: {id: ENABLE_SYS_DMA}
     children:
+    - type: Values
+      children:
+      - type: Dynamic
+        attributes: {id: HarmonyCore, value: 'false'}
+  - type: Boolean
+    attributes: {id: ENABLE_SYS_INT}
+    children:
+    - type: Values
+      children:
+      - type: Dynamic
+        attributes: {id: HarmonyCore, value: 'true'}
+  - type: Boolean
+    attributes: {id: ENABLE_SYS_MEDIA}
+    children:
     - type: Attributes
       children:
       - type: Boolean
@@ -202,14 +180,7 @@ children:
       - type: Dynamic
         attributes: {id: HarmonyCore, value: 'true'}
   - type: Boolean
-    attributes: {id: ENABLE_SYS_INT}
-    children:
-    - type: Values
-      children:
-      - type: Dynamic
-        attributes: {id: HarmonyCore, value: 'true'}
-  - type: Boolean
-    attributes: {id: ENABLE_SYS_MEDIA}
+    attributes: {id: ENABLE_SYS_RESET}
     children:
     - type: Attributes
       children:
@@ -586,6 +557,33 @@ children:
         attributes: {id: enabled}
         children:
         - {type: Value, value: 'true'}
+  - type: File
+    attributes: {id: RESET_DEF}
+    children:
+    - type: Attributes
+      children:
+      - type: Boolean
+        attributes: {id: enabled}
+        children:
+        - {type: Value, value: 'true'}
+  - type: File
+    attributes: {id: RESET_HEADER}
+    children:
+    - type: Attributes
+      children:
+      - type: Boolean
+        attributes: {id: enabled}
+        children:
+        - {type: Value, value: 'true'}
+  - type: File
+    attributes: {id: RESET_MAPPING}
+    children:
+    - type: Attributes
+      children:
+      - type: Boolean
+        attributes: {id: enabled}
+        children:
+        - {type: Value, value: 'true'}
   - type: Combo
     attributes: {id: SELECT_RTOS}
     children:
@@ -693,4 +691,4 @@ children:
         children:
         - {type: Value, value: 'true'}
 - type: ElementPosition
-  attributes: {x: '704', y: '38', id: HarmonyCore}
+  attributes: {x: '156', y: '78', id: HarmonyCore}

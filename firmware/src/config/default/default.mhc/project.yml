@@ -41,20 +41,6 @@ files:
   security: NON_SECURE
   type: SOURCE
   userChecksum: A3E17273BDAD8A51FDF695EBF9AD9A77
-- generatedChecksum: 54185703781590D9DA4110F187D2F25E
-  logicalPath: config/default/driver/usart
-  name: drv_usart.c
-  physicalPath: driver/usart/src
-  security: NON_SECURE
-  type: SOURCE
-  userChecksum: 54185703781590D9DA4110F187D2F25E
-- generatedChecksum: 0C11D4D9C1A96A1F2D54E71396D42E32
-  logicalPath: config/default/driver/usart
-  name: drv_usart_local.h
-  physicalPath: driver/usart/src
-  security: NON_SECURE
-  type: SOURCE
-  userChecksum: 0C11D4D9C1A96A1F2D54E71396D42E32
 - generatedChecksum: 8048089AA9DA0663AE185F78DF90D645
   logicalPath: config/default/driver/usb/usbhs/src
   name: drv_usbhs.c
@@ -111,13 +97,13 @@ files:
   security: NON_SECURE
   type: SOURCE
   userChecksum: 052E29F208E27B9384BB5F41C94AB25E
-- generatedChecksum: 994005B7A8B0AB1EFDCB2E3796AEFD19
+- generatedChecksum: C25A2E150AAC4ABF1A89728E968CBACA
   logicalPath: config/default
   name: initialization.c
   physicalPath: ''
   security: NON_SECURE
   type: SOURCE
-  userChecksum: 994005B7A8B0AB1EFDCB2E3796AEFD19
+  userChecksum: A11259EA9C61D179F9D0B88857AE9ED6
 - generatedChecksum: BE84C663857FA79B5FC53394667BD4E3
   logicalPath: config/default
   name: interrupts.c
@@ -202,13 +188,13 @@ files:
   security: NON_SECURE
   type: SOURCE
   userChecksum: 328ABBC2E18614E469D9805671CE29A1
-- generatedChecksum: E929AA29555EDA747F11829EBDB1F8A6
+- generatedChecksum: E6DC75F0BA29ACFCB2CF87E31F24828B
   logicalPath: config/default/peripheral/uart
   name: plib_uart2.c
   physicalPath: peripheral/uart
   security: NON_SECURE
   type: SOURCE
-  userChecksum: E929AA29555EDA747F11829EBDB1F8A6
+  userChecksum: E6DC75F0BA29ACFCB2CF87E31F24828B
 - generatedChecksum: 8B23ADF60BBD9F47FF5A96A52C2CAA9B
   logicalPath: FreeRTOS/Source/portable/MPLAB/PIC32MZ
   name: port.c
@@ -244,13 +230,62 @@ files:
   security: NON_SECURE
   type: SOURCE
   userChecksum: 47204A328D6218B0241B5993D3198668
-- generatedChecksum: 0A6893369C4DA0EE7906866EB6E1D310
-  logicalPath: config/default/system/dma
-  name: sys_dma.c
-  physicalPath: system/dma
+- generatedChecksum: B272B2EB06FC4376B9EEB88671E27D74
+  logicalPath: config/default/system/command
+  name: sys_command.c
+  physicalPath: system/command/src
   security: NON_SECURE
   type: SOURCE
-  userChecksum: 0A6893369C4DA0EE7906866EB6E1D310
+  userChecksum: B272B2EB06FC4376B9EEB88671E27D74
+- generatedChecksum: 20C22A19D5DC74DEBFC4CCCA83B6F603
+  logicalPath: config/default/system/console
+  name: sys_console.c
+  physicalPath: system/console/src
+  security: NON_SECURE
+  type: SOURCE
+  userChecksum: 20C22A19D5DC74DEBFC4CCCA83B6F603
+- generatedChecksum: 5BA0902794A8669B3FE37E8A8BEE9D65
+  logicalPath: config/default/system/console
+  name: sys_console_local.h
+  physicalPath: system/console/src
+  security: NON_SECURE
+  type: SOURCE
+  userChecksum: 5BA0902794A8669B3FE37E8A8BEE9D65
+- generatedChecksum: CA5E9B63704372DE5FBC0BDC006B16C3
+  logicalPath: config/default/system/console
+  name: sys_console_uart.c
+  physicalPath: system/console/src
+  security: NON_SECURE
+  type: SOURCE
+  userChecksum: CA5E9B63704372DE5FBC0BDC006B16C3
+- generatedChecksum: 767495C6A39617A915D8107093DC1A72
+  logicalPath: config/default/system/console
+  name: sys_console_uart.h
+  physicalPath: system/console/src
+  security: NON_SECURE
+  type: SOURCE
+  userChecksum: 767495C6A39617A915D8107093DC1A72
+- generatedChecksum: 5D10B9438117B64220180660AB022150
+  logicalPath: config/default/system/console
+  name: sys_console_uart_definitions.h
+  physicalPath: system/console/src
+  security: NON_SECURE
+  type: SOURCE
+  userChecksum: 5D10B9438117B64220180660AB022150
+- generatedChecksum: 68C0D499B9EDAA3BFD7E131A48514212
+  logicalPath: config/default/system/debug
+  name: sys_debug.c
+  physicalPath: system/debug/src
+  security: NON_SECURE
+  type: SOURCE
+  userChecksum: 68C0D499B9EDAA3BFD7E131A48514212
+- generatedChecksum: B8C6C7356AC7841AECC7C779040F745C
+  logicalPath: config/default/system/debug
+  name: sys_debug_local.h
+  physicalPath: system/debug/src
+  security: NON_SECURE
+  type: SOURCE
+  userChecksum: B8C6C7356AC7841AECC7C779040F745C
 - generatedChecksum: 080787C129FAB1FAECC1C54746696717
   logicalPath: config/default/system/fs
   name: sys_fs.c
@@ -279,6 +314,13 @@ files:
   security: NON_SECURE
   type: SOURCE
   userChecksum: C95CE0ABB86E6B11CF77E8891D294510
+- generatedChecksum: 47B584985982B2FF32628D4CB874CB4D
+  logicalPath: config/default/system/reset
+  name: sys_reset.c
+  physicalPath: system/reset
+  security: NON_SECURE
+  type: SOURCE
+  userChecksum: 47B584985982B2FF32628D4CB874CB4D
 - generatedChecksum: 83BDE663A1AAB20C9E52263F22E2ED3C
   logicalPath: config/default/system/time
   name: sys_time.c
@@ -286,13 +328,13 @@ files:
   security: NON_SECURE
   type: SOURCE
   userChecksum: 83BDE663A1AAB20C9E52263F22E2ED3C
-- generatedChecksum: F75B07563F438FEA1DD1536EDA8B9AA0
+- generatedChecksum: 50FE6BE5A4E61BC49F1B55730024155C
   logicalPath: config/default
   name: tasks.c
   physicalPath: ''
   security: NON_SECURE
   type: SOURCE
-  userChecksum: F75B07563F438FEA1DD1536EDA8B9AA0
+  userChecksum: 50FE6BE5A4E61BC49F1B55730024155C
 - generatedChecksum: BFF63C63E613200CFC9D0E9593031787
   logicalPath: FreeRTOS/Source
   name: timers.c
@@ -342,13 +384,13 @@ files:
   security: NON_SECURE
   type: HEADER
   userChecksum: BCDC1865B923B79D6B4BB4A6606CB111
-- generatedChecksum: 29E738EE87AF8591FB02893D696F3FFE
+- generatedChecksum: ECB722D4ACE9172CCDEB68B45C1B488F
   logicalPath: config/default
   name: FreeRTOSConfig.h
   physicalPath: ''
   security: NON_SECURE
   type: HEADER
-  userChecksum: 29E738EE87AF8591FB02893D696F3FFE
+  userChecksum: ECB722D4ACE9172CCDEB68B45C1B488F
 - generatedChecksum: 6AA4FBA4B9ED4676357BCC3B10E0A6D5
   logicalPath: FreeRTOS/Source/portable/MPLAB/PIC32MZ
   name: ISR_Support.h
@@ -377,13 +419,13 @@ files:
   security: NON_SECURE
   type: HEADER
   userChecksum: 256687BF6234F5CEDB28FA75A3AEBFF6
-- generatedChecksum: 6EB22B6B7B97B8C60F273277B82C8A6E
+- generatedChecksum: 3664C226A0CF62E9EEC982DD83B1A622
   logicalPath: config/default
   name: configuration.h
   physicalPath: ''
   security: NON_SECURE
   type: HEADER
-  userChecksum: 6EB22B6B7B97B8C60F273277B82C8A6E
+  userChecksum: 3664C226A0CF62E9EEC982DD83B1A622
 - generatedChecksum: 799499D320508B137A1F38041909EE57
   logicalPath: FreeRTOS/Source/include
   name: croutine.h
@@ -391,13 +433,13 @@ files:
   security: NON_SECURE
   type: HEADER
   userChecksum: 799499D320508B137A1F38041909EE57
-- generatedChecksum: AF206FAD8017199F2CD89630FC5701E6
+- generatedChecksum: 1DF35A9D84A8CE4CD26F345E24A6BDE1
   logicalPath: config/default
   name: definitions.h
   physicalPath: ''
   security: NON_SECURE
   type: HEADER
-  userChecksum: AF206FAD8017199F2CD89630FC5701E6
+  userChecksum: 1DF35A9D84A8CE4CD26F345E24A6BDE1
 - generatedChecksum: A87B8720A7388B92787B15BFE92911FB
   logicalPath: FreeRTOS/Source/include
   name: deprecated_definitions.h
@@ -440,20 +482,6 @@ files:
   security: NON_SECURE
   type: HEADER
   userChecksum: CC7DFCC51CD25171A3E400E18969354F
-- generatedChecksum: 6AF29C60E3BC9BB1F75754A49FBC6473
-  logicalPath: config/default/driver/usart
-  name: drv_usart.h
-  physicalPath: driver/usart
-  security: NON_SECURE
-  type: HEADER
-  userChecksum: 6AF29C60E3BC9BB1F75754A49FBC6473
-- generatedChecksum: 57D98C51D97F6D4A954D171F1EEC9CBB
-  logicalPath: config/default/driver/usart
-  name: drv_usart_definitions.h
-  physicalPath: driver/usart
-  security: NON_SECURE
-  type: HEADER
-  userChecksum: 57D98C51D97F6D4A954D171F1EEC9CBB
 - generatedChecksum: DF147276AE56CA76E3E9BEB8447620AB
   logicalPath: config/default/driver/usb
   name: drv_usb.h
@@ -608,13 +636,13 @@ files:
   security: NON_SECURE
   type: HEADER
   userChecksum: 4C6C4A7B7E33767128AA763FFAE2E394
-- generatedChecksum: ED74899E8093FE270EE378ABAE2DFBCB
+- generatedChecksum: 86D499749C924875389705AA3D0C9FD7
   logicalPath: config/default/peripheral/uart
   name: plib_uart2.h
   physicalPath: peripheral/uart
   security: NON_SECURE
   type: HEADER
-  userChecksum: ED74899E8093FE270EE378ABAE2DFBCB
+  userChecksum: 86D499749C924875389705AA3D0C9FD7
 - generatedChecksum: 91611515A95D92B82B7F4064C16D122B
   logicalPath: config/default/peripheral/uart
   name: plib_uart_common.h
@@ -699,6 +727,20 @@ files:
   security: NON_SECURE
   type: HEADER
   userChecksum: AFAAF7D896D57569CA4CF73BB3339481
+- generatedChecksum: 712D1407BC82CB6B3C4C44FED4F14D26
+  logicalPath: config/default/system/command
+  name: sys_command.h
+  physicalPath: system/command
+  security: NON_SECURE
+  type: HEADER
+  userChecksum: 712D1407BC82CB6B3C4C44FED4F14D26
+- generatedChecksum: 91CB36F6EC29DAA7C584282A875E5CBA
+  logicalPath: config/default/system/console
+  name: sys_console.h
+  physicalPath: system/console
+  security: NON_SECURE
+  type: HEADER
+  userChecksum: 91CB36F6EC29DAA7C584282A875E5CBA
 - generatedChecksum: 6972608768DDBE6E37A2D81B83DF490B
   logicalPath: config/default/system/debug
   name: sys_debug.h
@@ -706,20 +748,6 @@ files:
   security: NON_SECURE
   type: HEADER
   userChecksum: 6972608768DDBE6E37A2D81B83DF490B
-- generatedChecksum: 4A7FFAD7ACF8378CEC16FBF2BC2368BE
-  logicalPath: config/default/system/dma
-  name: sys_dma.h
-  physicalPath: system/dma
-  security: NON_SECURE
-  type: HEADER
-  userChecksum: 4A7FFAD7ACF8378CEC16FBF2BC2368BE
-- generatedChecksum: 42E557EFE638D7A736FB88AA84F085F1
-  logicalPath: config/default/system/dma
-  name: sys_dma_mapping.h
-  physicalPath: system/dma
-  security: NON_SECURE
-  type: HEADER
-  userChecksum: 42E557EFE638D7A736FB88AA84F085F1
 - generatedChecksum: DDC1AA937FC332670372DC2E7B5CA1F2
   logicalPath: config/default/system/fs
   name: sys_fs.h
@@ -769,6 +797,13 @@ files:
   security: NON_SECURE
   type: HEADER
   userChecksum: FC7B55936A09E0CA1395AE4DFB1A188F
+- generatedChecksum: 8E43BD17134E69982826F202D0AB42C5
+  logicalPath: config/default/system/reset
+  name: sys_reset.h
+  physicalPath: system/reset
+  security: NON_SECURE
+  type: HEADER
+  userChecksum: 8E43BD17134E69982826F202D0AB42C5
 - generatedChecksum: 466D676839280C0E7FC2CC6F78BA6EE9
   logicalPath: config/default/system/time
   name: sys_time.h
@@ -1163,7 +1198,7 @@ settings:
   delimiter: ''
   key: heap-size
   security: NON_SECURE
-  value: '512'
+  value: '1024'
 - append: false
   category: C32-LD
   delimiter: ''

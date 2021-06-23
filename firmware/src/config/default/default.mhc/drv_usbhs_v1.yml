@@ -71,4 +71,4 @@ children:
       - type: Dynamic
         attributes: {id: drv_usbhs_v1, value: Host}
 - type: ElementPosition
-  attributes: {x: '688', y: '183', id: drv_usbhs_v1}
+  attributes: {x: '315', y: '115', id: drv_usbhs_v1}

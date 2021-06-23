@@ -33,6 +33,8 @@
 //------------------------------------------------------------------------------
 #include "FreeRTOS.h"
 #include "task.h"
+//#include "config/default/system/debug/sys_debug.h"
+#include "config/default/system/console/sys_console.h"
 //------------------------------------------------------------------------------
 
 // *****************************************************************************
@@ -55,11 +57,11 @@
 
     Application strings and buffers are be defined outside this structure.
 */
-
+//-----------------------------------------------------------------------------
 APP_USB_THREAD_DATA app_usb_threadData;
 
 /* This is the string that will written to the file */
-USB_ALIGN uint8_t writeData[30] = "Hello World \r\n";
+//USB_ALIGN uint8_t writeData[30] = "Hello World \r\n";
 
 // *****************************************************************************
 // *****************************************************************************
@@ -207,7 +209,7 @@ void APP_USB_THREAD_Initialize ( void )
 
 void APP_USB_THREAD_Tasks ( void )
 {
-    uint8_t strlen;                        
+//    uint8_t strlen;                        
 
     /* Check the application's current state. */
     switch ( app_usb_threadData.state )
@@ -215,22 +217,28 @@ void APP_USB_THREAD_Tasks ( void )
         /* Application's initial state. */
         case APP_USB_THREAD_STATE_INIT:
         {
+//            SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG,"USB thread: USART init ok \r\n");
+            SYS_CONSOLE_MESSAGE("USB thread: USART init ok \r\n");
+            app_usb_threadData.state = APP_USB_THREAD_STATE_BUS_ENABLE;
+
 //            if ( DRV_USART_Status(sysObj.drvUsart0) == SYS_STATUS_READY )
             {
-                app_usb_threadData.usartHandle = DRV_USART_Open(DRV_USART_INDEX_0, DRV_IO_INTENT_WRITE);
-                if (app_usb_threadData.usartHandle == DRV_HANDLE_INVALID)
-                {
-                    /* Handle Error */
-                }    
-                else
-                {
-                    /* All drivers opened successfully */
-                    app_usb_threadData.state = APP_USB_THREAD_STATE_BUS_ENABLE;
-                    strlen = sprintf((char*)app_usb_threadData.usartWriteData, "USB thread: USART init ok \r\n");
-                    DRV_USART_WriteBuffer( app_usb_threadData.usartHandle, 
-                                           app_usb_threadData.usartWriteData, 
-                                           strlen );
-                }
+//                app_usb_threadData.usartHandle = DRV_USART_Open(DRV_USART_INDEX_0, DRV_IO_INTENT_WRITE);
+//                if (app_usb_threadData.usartHandle == DRV_HANDLE_INVALID)
+//                {
+//                    /* Handle Error */
+//                }    
+//                else
+//                {
+//                    /* All drivers opened successfully */
+//                    app_usb_threadData.state = APP_USB_THREAD_STATE_BUS_ENABLE;
+//                    uint8_t str_len = sprintf((char*)app_usb_threadData.usartWriteData, "USB thread: USART init ok \r\n");
+////                    sprintf((char*)app_usb_threadData.usartWriteData, "USB thread: USART init ok \r\n");
+//                    DRV_USART_WriteBuffer( app_usb_threadData.usartHandle, 
+//                                           app_usb_threadData.usartWriteData, 
+//                                           str_len);
+////                                           strlen((char*)app_usb_threadData.usartWriteData) );
+//                }
             }
             
         }
@@ -300,9 +308,9 @@ void APP_USB_THREAD_Tasks ( void )
         case APP_USB_THREAD_STATE_WRITE_TO_FILE:
         {
             /* Try writing to the file */
-            strlen = sprintf((char*)writeData, "Temperature = %d F\r\n", (uint8_t)app_usb_threadData.eventInfo.eventData);  
+            uint8_t str_len = sprintf((char*)app_usb_threadData.writeData, "Temperature = %d F\r\n", (uint8_t)app_usb_threadData.eventInfo.eventData);  
             
-            if (SYS_FS_FileWrite( app_usb_threadData.fileHandle, (const void *) writeData, strlen) == -1)
+            if (SYS_FS_FileWrite( app_usb_threadData.fileHandle, (const void *) app_usb_threadData.writeData, str_len) == -1)
             {
                 /* Write was not successful. Close the file
                  * and error out.*/
@@ -370,8 +378,6 @@ void APP_USB_THREAD_Tasks ( void )
         }
     }
 }
-
-
 /*******************************************************************************
  End of File
  */

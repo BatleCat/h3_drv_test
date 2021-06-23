@@ -1,22 +1,23 @@
 /*******************************************************************************
-  UART2 PLIB
+  RESET Service
 
   Company:
     Microchip Technology Inc.
 
   File Name:
-    plib_uart2.h
+    sys_reset.h
 
   Summary:
-    UART2 PLIB Header File
+    RESET Service Header File
 
   Description:
-    None
+    This library provides an interface to control and interact with RESET
+    System Service.
 
 *******************************************************************************/
 
 /*******************************************************************************
-* Copyright (C) 2019 Microchip Technology Inc. and its subsidiaries.
+* Copyright (C) 2018 Microchip Technology Inc. and its subsidiaries.
 *
 * Subject to your compliance with these terms, you may use Microchip software
 * and any derivatives exclusively with Microchip products. It is your
@@ -38,14 +39,8 @@
 * THAT YOU HAVE PAID DIRECTLY TO MICROCHIP FOR THIS SOFTWARE.
 *******************************************************************************/
 
-#ifndef PLIB_UART2_H
-#define PLIB_UART2_H
-
-#include <stddef.h>
-#include <stdbool.h>
-#include <stdint.h>
-#include "device.h"
-#include "plib_uart_common.h"
+#ifndef SYS_RESET_H
+#define SYS_RESET_H
 
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility
@@ -56,48 +51,34 @@
 // DOM-IGNORE-END
 
 // *****************************************************************************
-// *****************************************************************************
-// Section: Interface
-// *****************************************************************************
-// *****************************************************************************
+/* Function:
+    void SYS_RESET_SoftwareReset( void )
 
-#define UART2_FrequencyGet()    (uint32_t)(100000000UL)
+  Summary:
+    Triggers a software reset.
 
-/****************************** UART2 API *********************************/
+  Description:
+    This function triggers a software Reset.
 
-void UART2_Initialize( void );
+  PreCondition:
+    None.
 
-bool UART2_SerialSetup( UART_SERIAL_SETUP *setup, uint32_t srcClkFreq );
+  Parameters:
+    None.
 
-UART_ERROR UART2_ErrorGet( void );
+  Returns:
+    None.
 
-size_t UART2_Write(uint8_t* pWrBuffer, const size_t size );
+  Example:
+    <code>
+    
+    SYS_RESET_SoftwareReset();
+    </code>
 
-size_t UART2_WriteCountGet(void);
-
-size_t UART2_WriteFreeBufferCountGet(void);
-
-size_t UART2_WriteBufferSizeGet(void);
-
-bool UART2_WriteNotificationEnable(bool isEnabled, bool isPersistent);
-
-void UART2_WriteThresholdSet(uint32_t nBytesThreshold);
-
-void UART2_WriteCallbackRegister( UART_RING_BUFFER_CALLBACK callback, uintptr_t context);
-
-size_t UART2_Read(uint8_t* pRdBuffer, const size_t size);
-
-size_t UART2_ReadCountGet(void);
-
-size_t UART2_ReadFreeBufferCountGet(void);
-
-size_t UART2_ReadBufferSizeGet(void);
-
-bool UART2_ReadNotificationEnable(bool isEnabled, bool isPersistent);
-
-void UART2_ReadThresholdSet(uint32_t nBytesThreshold);
-
-void UART2_ReadCallbackRegister( UART_RING_BUFFER_CALLBACK callback, uintptr_t context);
+  Remarks:
+    None.
+*/
+void SYS_RESET_SoftwareReset( void );
 
 // DOM-IGNORE-BEGIN
 #ifdef __cplusplus  // Provide C++ Compatibility
@@ -106,5 +87,4 @@ void UART2_ReadCallbackRegister( UART_RING_BUFFER_CALLBACK callback, uintptr_t c
 
 #endif
 // DOM-IGNORE-END
-
-#endif // PLIB_UART2_H
+#endif // SYS_RESET_H
