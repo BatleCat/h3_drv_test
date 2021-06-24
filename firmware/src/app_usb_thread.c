@@ -312,7 +312,7 @@ void APP_USB_THREAD_Tasks ( void )
         {
             SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "USB thread: Write data to file \r\n");
             /* Try writing to the file */
-            uint8_t str_len = sprintf((char*)app_usb_threadData.writeData, "Temperature = %d F\r\n", (uint8_t)app_usb_threadData.eventInfo.eventData);  
+            uint8_t str_len = sprintf((char*)app_usb_threadData.writeData, "New record of Temperature = %d C\r\n", (uint8_t)app_usb_threadData.eventInfo.eventData);  
             
             if (SYS_FS_FileWrite( app_usb_threadData.fileHandle, (const void *) app_usb_threadData.writeData, str_len) == -1)
             {

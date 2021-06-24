@@ -98,7 +98,7 @@ void _APP_Commands_testAnswer(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv
     }
     EVENT_INFO ev;
     ev.eventType = EVENT_TYPE_TEMP_WRITE_REQ;
-    ev.eventData = 45;
+    ev.eventData = 145;
     xQueueSend( eventQueue, (void*)&ev, portMAX_DELAY);
     APP_Send_Packet = true;
     LED1_Toggle();
