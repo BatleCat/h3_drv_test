@@ -265,6 +265,7 @@ void APP_USB_THREAD_Tasks ( void )
             if(app_usb_threadData.deviceIsConnected)
             {
                 app_usb_threadData.state = APP_USB_THREAD_STATE_IDLE;
+                SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "USB thread: Flash-disk is mount \r\n");
             }
 
             break;
@@ -288,6 +289,8 @@ void APP_USB_THREAD_Tasks ( void )
         }
         case APP_USB_THREAD_STATE_OPEN_FILE:
         {
+            LED2_On();
+            SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "USB thread: Open file \r\n");
             /* Try opening the file for append */
             app_usb_threadData.fileHandle = SYS_FS_FileOpen("/mnt/myDrive1/Temperature_Sensor_Data.txt", (SYS_FS_FILE_OPEN_APPEND_PLUS));
             if(app_usb_threadData.fileHandle == SYS_FS_HANDLE_INVALID)
@@ -307,6 +310,7 @@ void APP_USB_THREAD_Tasks ( void )
         }
         case APP_USB_THREAD_STATE_WRITE_TO_FILE:
         {
+            SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "USB thread: Write data to file \r\n");
             /* Try writing to the file */
             uint8_t str_len = sprintf((char*)app_usb_threadData.writeData, "Temperature = %d F\r\n", (uint8_t)app_usb_threadData.eventInfo.eventData);  
             
@@ -326,10 +330,11 @@ void APP_USB_THREAD_Tasks ( void )
         }
         case APP_USB_THREAD_STATE_CLOSE_FILE:
         {
+            SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "USB thread: Close file \r\n");
             /* Close the file */
             SYS_FS_FileClose(app_usb_threadData.fileHandle);
             /* Indicate User that File operation has been completed */
-            LED2_On(); 
+            LED2_Off();
             /* The test was successful. Lets idle. */
             app_usb_threadData.state = APP_USB_THREAD_STATE_IDLE;
             break;

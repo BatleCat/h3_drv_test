@@ -3,19 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Andrey/2021/myprog/microchip/MPLabX/h3_drv_test/firmware/src/main.c</file>
-            <file>file:/D:/Andrey/2021/myprog/microchip/MPLabX/h3_drv_test/firmware/src/config/default/system/command/sys_command.h</file>
             <file>file:/D:/Andrey/2021/myprog/microchip/MPLabX/h3_drv_test/firmware/src/config/default/FreeRTOSConfig.h</file>
-            <file>file:/D:/Andrey/2021/myprog/microchip/MPLabX/h3_drv_test/firmware/src/third_party/rtos/FreeRTOS/Source/include/timers.h</file>
             <file>file:/D:/Andrey/2021/myprog/microchip/MPLabX/h3_drv_test/firmware/src/app_commands.c</file>
-            <file>file:/D:/Andrey/2021/myprog/microchip/MPLabX/h3_drv_test/firmware/src/config/default/system/debug/sys_debug.h</file>
-            <file>file:/D:/Andrey/2021/myprog/microchip/MPLabX/h3_drv_test/firmware/src/app_commands.h</file>
-            <file>file:/D:/Andrey/2021/myprog/microchip/MPLabX/h3_drv_test/firmware/src/config/default/system/command/src/sys_command.c</file>
             <file>file:/D:/Andrey/2021/myprog/microchip/MPLabX/h3_drv_test/firmware/src/app_user_input_thread.h</file>
-            <file>file:/D:/Andrey/2021/myprog/microchip/MPLabX/h3_drv_test/firmware/src/config/default/initialization.c</file>
+            <file>file:/D:/Andrey/2021/myprog/microchip/MPLabX/h3_drv_test/firmware/src/app_commands.h</file>
             <file>file:/D:/Andrey/2021/myprog/microchip/MPLabX/h3_drv_test/firmware/src/app_usb_thread.h</file>
             <file>file:/D:/Andrey/2021/myprog/microchip/MPLabX/h3_drv_test/firmware/src/app_user_input_thread.c</file>
-            <file>file:/D:/Andrey/2021/myprog/microchip/MPLabX/h3_drv_test/firmware/src/third_party/rtos/FreeRTOS/Source/timers.c</file>
             <file>file:/D:/Andrey/2021/myprog/microchip/MPLabX/h3_drv_test/firmware/src/app_usb_thread.c</file>
         </group>
     </open-files>

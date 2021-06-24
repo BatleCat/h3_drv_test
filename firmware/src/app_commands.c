@@ -42,6 +42,9 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include <stddef.h>
 #include "config/default/system/command/sys_command.h"
 #include "config/default/system/debug/sys_debug.h"
+#include "FreeRTOS.h"
+#include "queue.h"
+#include "app_user_input_thread.h"
 //#include "config/default/system/console/sys_console.h"
 #include <bsp/bsp.h>
 //-----------------------------------------------------------------------------
@@ -93,6 +96,10 @@ void _APP_Commands_testAnswer(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv
         (*pCmdIO->pCmdApi->msg)(cmdIoParam, "Ex: test\r\n");
         return;
     }
+    EVENT_INFO ev;
+    ev.eventType = EVENT_TYPE_TEMP_WRITE_REQ;
+    ev.eventData = 45;
+    xQueueSend( eventQueue, (void*)&ev, portMAX_DELAY);
     APP_Send_Packet = true;
     LED1_Toggle();
     return;

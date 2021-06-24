@@ -138,31 +138,6 @@ void APP_USER_INPUT_THREAD_Initialize ( void )
         LED1_On();
         /* Handle error condition. Not sufficient memory to create Queue */
     }
-    
-    app_user_input_threadData.xUsartTimer = xTimerCreate( 
-                                                         "USART_App Timer",     /* Just a text name, not used by the RTOS kernel. */
-                                                         100000000, //pdMS_TO_TICKS( 500 ),  /* The timer period in ticks, must be greater than 0. */
-                                                         pdTRUE,                /* The timers will auto-reload themselves when they expire. */
-                                                         ( void * ) 0,          /* The ID is used to store a count of the number of times the timer has expired, which is initialised to 0. */
-                                                         vTimerCallback         /* Each timer calls the same callback when it expires. */
-                                                        );
-
-    if( app_user_input_threadData.xUsartTimer == NULL )
-    {
-         /* The timer was not created. */
-    }
-    else
-    {
-        /* Start the timer.  No block time is specified, and
-        even if one was it would be ignored because the RTOS
-        scheduler has not yet been started. */
-        if( xTimerStart( app_user_input_threadData.xUsartTimer, 0 ) != pdPASS )
-        {
-            /* The timer could not be set into the Active
-            state. */
-        }
-    }
-
 }
 /******************************************************************************
   Function:
@@ -206,6 +181,29 @@ void APP_USER_INPUT_THREAD_Tasks ( void )
 ////                                       strlen((char*)app_user_input_threadData.usartWriteData) );
 //                if (bres == true) LED1_On();
 //            }
+            app_user_input_threadData.xUsartTimer = xTimerCreate( 
+                                                                 "USART_App Timer",     /* Just a text name, not used by the RTOS kernel. */
+                                                                 100000000, //pdMS_TO_TICKS( 500 ),  /* The timer period in ticks, must be greater than 0. */
+                                                                 pdTRUE,                /* The timers will auto-reload themselves when they expire. */
+                                                                 ( void * ) 0,          /* The ID is used to store a count of the number of times the timer has expired, which is initialised to 0. */
+                                                                 vTimerCallback         /* Each timer calls the same callback when it expires. */
+                                                                );
+
+            if( app_user_input_threadData.xUsartTimer == NULL )
+            {
+                 /* The timer was not created. */
+            }
+            else
+            {
+                /* Start the timer.  No block time is specified, and
+                even if one was it would be ignored because the RTOS
+                scheduler has not yet been started. */
+                if( xTimerStart( app_user_input_threadData.xUsartTimer, 0 ) != pdPASS )
+                {
+                    /* The timer could not be set into the Active
+                    state. */
+                }
+            }
         }
     }
     else
