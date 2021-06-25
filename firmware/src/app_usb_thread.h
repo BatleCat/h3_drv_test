@@ -33,6 +33,7 @@
 #include <stdlib.h>
 #include "configuration.h"
 #include "FreeRTOS.h"
+#include "queue.h"
 #include "task.h"
 #include "definitions.h"
 //------------------------------------------------------------------------------

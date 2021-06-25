@@ -41,13 +41,15 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "app_commands.h"
 #include <stddef.h>
 #include "config/default/system/command/sys_command.h"
-#include "config/default/system/debug/sys_debug.h"
 #include "FreeRTOS.h"
 #include "queue.h"
 #include "app_user_input_thread.h"
-//#include "config/default/system/console/sys_console.h"
+//#include "config/default/system/debug/sys_debug.h"
+#include "config/default/system/console/sys_console.h"
 #include <bsp/bsp.h>
-//-----------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+#define ENABLE_CONSOLE_MESSAGE
+//------------------------------------------------------------------------------
 static void _APP_Commands_testAnswer (SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv);
 static void _APP_Commands_stopUDPtest(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv);
 static void _APP_Commands_SetOptions (SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv);
@@ -66,7 +68,11 @@ bool APP_Commands_Init()
     if (!SYS_CMD_ADDGRP(appCmdTbl, sizeof(appCmdTbl)/sizeof(*appCmdTbl), "app", ": app commands"))
     {
 //        SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG,"USB thread: USART init ok \r\n");
-        SYS_ERROR(SYS_ERROR_ERROR, "Failed to create APP Commands\r\n");
+//        SYS_ERROR(SYS_ERROR_ERROR, "APP commands: Failed to create APP Commands!!!\r\n");
+#ifdef ENABLE_CONSOLE_MESSAGE
+        SYS_CONSOLE_MESSAGE("APP commands: Failed to create APP Commands\r\n");
+#endif
+        
 //        SYS_CONSOLE_MESSAGE("USB thread: USART init ok \r\n");
         return false;
     }
@@ -87,7 +93,11 @@ bool APP_Stop_Packet = false;
 //-----------------------------------------------------------------------------
 void _APP_Commands_testAnswer(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv)
 {
-    SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG,"APP commands: Test \r\n");
+//    SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "APP commands: Test \r\n");
+#ifdef ENABLE_CONSOLE_MESSAGE
+    SYS_CONSOLE_MESSAGE("APP commands: Test \r\n");
+#endif
+    
     const void* cmdIoParam = pCmdIO->cmdIoParam;
 
     if (argc != 1)
@@ -107,7 +117,11 @@ void _APP_Commands_testAnswer(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv
 //-----------------------------------------------------------------------------
 static void _APP_Commands_stopUDPtest(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv)
 {
-    SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG,"APP commands: Stop \r\n");
+//    SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "APP commands: Stop \r\n");
+#ifdef ENABLE_CONSOLE_MESSAGE
+    SYS_CONSOLE_MESSAGE("APP commands: Stop \r\n");
+#endif
+    
     const void* cmdIoParam = pCmdIO->cmdIoParam;
 
     if (argc != 1)
@@ -123,7 +137,11 @@ static void _APP_Commands_stopUDPtest(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, cha
 //-----------------------------------------------------------------------------
 static void _APP_Commands_SetOptions(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv)
 {
-    SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG,"APP commands: Set options \r\n");
+//    SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "APP commands: Set options \r\n");
+#ifdef ENABLE_CONSOLE_MESSAGE
+    SYS_CONSOLE_MESSAGE("APP commands: Set options \r\n");
+#endif
+    
     const void* cmdIoParam = pCmdIO->cmdIoParam;
 
     if (argc != 4)
@@ -144,7 +162,11 @@ static void _APP_Commands_SetOptions(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char
 //-----------------------------------------------------------------------------
 void _APP_Commands_GetOptions(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv)
 {
-    SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG,"APP commands: Get options \r\n");
+//    SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG,"APP commands: Get options \r\n");
+#ifdef ENABLE_CONSOLE_MESSAGE
+    SYS_CONSOLE_MESSAGE("APP commands: Get options \r\n");
+#endif
+    
     const void* cmdIoParam = pCmdIO->cmdIoParam;
     
     if (argc != 1)
@@ -165,3 +187,5 @@ void _APP_Commands_GetOptions(SYS_CMD_DEVICE_NODE* pCmdIO, int argc, char** argv
     return;
 }
 //-----------------------------------------------------------------------------
+#undef ENABLE_CONSOLE_MESSAGE
+//------------------------------------------------------------------------------

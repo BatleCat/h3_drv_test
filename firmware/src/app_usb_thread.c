@@ -36,6 +36,8 @@
 //#include "config/default/system/debug/sys_debug.h"
 #include "config/default/system/console/sys_console.h"
 //------------------------------------------------------------------------------
+#define ENABLE_CONSOLE_MESSAGE
+//------------------------------------------------------------------------------
 
 // *****************************************************************************
 // *****************************************************************************
@@ -218,7 +220,9 @@ void APP_USB_THREAD_Tasks ( void )
         case APP_USB_THREAD_STATE_INIT:
         {
 //            SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG,"USB thread: USART init ok \r\n");
+#ifdef ENABLE_CONSOLE_MESSAGE
             SYS_CONSOLE_MESSAGE("USB thread: USART init ok \r\n");
+#endif
             app_usb_threadData.state = APP_USB_THREAD_STATE_BUS_ENABLE;
 
 //            if ( DRV_USART_Status(sysObj.drvUsart0) == SYS_STATUS_READY )
@@ -265,7 +269,10 @@ void APP_USB_THREAD_Tasks ( void )
             if(app_usb_threadData.deviceIsConnected)
             {
                 app_usb_threadData.state = APP_USB_THREAD_STATE_IDLE;
-                SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "USB thread: Flash-disk is mount \r\n");
+//                SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "USB thread: Flash-disk is mount \r\n");
+#ifdef ENABLE_CONSOLE_MESSAGE
+                SYS_CONSOLE_MESSAGE("USB thread: Flash-disk is mount \r\n");
+#endif
             }
 
             break;
@@ -290,7 +297,10 @@ void APP_USB_THREAD_Tasks ( void )
         case APP_USB_THREAD_STATE_OPEN_FILE:
         {
             LED2_On();
-            SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "USB thread: Open file \r\n");
+//            SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "USB thread: Open file \r\n");
+#ifdef ENABLE_CONSOLE_MESSAGE
+            SYS_CONSOLE_MESSAGE("USB thread: Open file \r\n");
+#endif
             /* Try opening the file for append */
             app_usb_threadData.fileHandle = SYS_FS_FileOpen("/mnt/myDrive1/Temperature_Sensor_Data.txt", (SYS_FS_FILE_OPEN_APPEND_PLUS));
             if(app_usb_threadData.fileHandle == SYS_FS_HANDLE_INVALID)
@@ -310,9 +320,12 @@ void APP_USB_THREAD_Tasks ( void )
         }
         case APP_USB_THREAD_STATE_WRITE_TO_FILE:
         {
-            SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "USB thread: Write data to file \r\n");
+//            SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "USB thread: Write data to file \r\n");
+#ifdef ENABLE_CONSOLE_MESSAGE
+            SYS_CONSOLE_MESSAGE("USB thread: Write data to file \r\n");
+#endif
             /* Try writing to the file */
-            uint8_t str_len = sprintf((char*)app_usb_threadData.writeData, "New record of Temperature = %d C\r\n", (uint8_t)app_usb_threadData.eventInfo.eventData);  
+            uint8_t str_len = sprintf((char*)app_usb_threadData.writeData, "Test contuine. Temperature = %d C\r\n", (uint8_t)app_usb_threadData.eventInfo.eventData);  
             
             if (SYS_FS_FileWrite( app_usb_threadData.fileHandle, (const void *) app_usb_threadData.writeData, str_len) == -1)
             {
@@ -330,7 +343,10 @@ void APP_USB_THREAD_Tasks ( void )
         }
         case APP_USB_THREAD_STATE_CLOSE_FILE:
         {
-            SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "USB thread: Close file \r\n");
+//            SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "USB thread: Close file \r\n");
+#ifdef ENABLE_CONSOLE_MESSAGE
+            SYS_CONSOLE_MESSAGE("USB thread: Close file \r\n");
+#endif
             /* Close the file */
             SYS_FS_FileClose(app_usb_threadData.fileHandle);
             /* Indicate User that File operation has been completed */
@@ -383,6 +399,9 @@ void APP_USB_THREAD_Tasks ( void )
         }
     }
 }
+//------------------------------------------------------------------------------
+#undef ENABLE_CONSOLE_MESSAGE
+//------------------------------------------------------------------------------
 /*******************************************************************************
  End of File
  */

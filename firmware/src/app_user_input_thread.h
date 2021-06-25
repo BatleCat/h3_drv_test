@@ -31,9 +31,10 @@
 #include <stddef.h>
 #include <stdlib.h>
 #include "configuration.h"
-#include "driver/usart/drv_usart.h"
+//#include "driver/usart/drv_usart.h"
 #include "FreeRTOS.h"
 #include "queue.h"
+#include "task.h"
 #include "timers.h"
 
 // DOM-IGNORE-BEGIN

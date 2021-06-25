@@ -31,9 +31,11 @@
 #include <stdio.h>
 #include <string.h>
 #include <bsp/bsp.h>
-#include "config/default/system/debug/sys_debug.h"
+//#include "config/default/system/debug/sys_debug.h"
+#include "config/default/system/console/sys_console.h"
 //------------------------------------------------------------------------------
-
+#define ENABLE_CONSOLE_MESSAGE
+//------------------------------------------------------------------------------
 // *****************************************************************************
 // *****************************************************************************
 // Section: Global Data Definitions
@@ -154,7 +156,10 @@ void APP_USER_INPUT_THREAD_Tasks ( void )
     /* Open the drivers if not already opened */
     if (app_user_input_threadData.isInitDone == false)
     {
-        SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG,"User input thread: USART init ok \r\n");
+//        SYS_DEBUG_MESSAGE(SYS_ERROR_DEBUG, "User input thread: USART init ok \r\n");
+#ifdef ENABLE_CONSOLE_MESSAGE
+        SYS_CONSOLE_MESSAGE("User input thread: USART init ok \r\n");
+#endif
         app_user_input_threadData.isInitDone = true;
         /* Open the USART driver to read user key press */
 //        if ( DRV_USART_Status(sysObj.drvUsart0) == SYS_STATUS_READY )
@@ -183,7 +188,7 @@ void APP_USER_INPUT_THREAD_Tasks ( void )
 //            }
             app_user_input_threadData.xUsartTimer = xTimerCreate( 
                                                                  "USART_App Timer",     /* Just a text name, not used by the RTOS kernel. */
-                                                                 100000000, //pdMS_TO_TICKS( 500 ),  /* The timer period in ticks, must be greater than 0. */
+                                                                 pdMS_TO_TICKS( 500 ),  /* The timer period in ticks, must be greater than 0. */
                                                                  pdTRUE,                /* The timers will auto-reload themselves when they expire. */
                                                                  ( void * ) 0,          /* The ID is used to store a count of the number of times the timer has expired, which is initialised to 0. */
                                                                  vTimerCallback         /* Each timer calls the same callback when it expires. */
@@ -259,6 +264,9 @@ void APP_USER_INPUT_THREAD_Tasks ( void )
 //    }
 }
 
+//------------------------------------------------------------------------------
+#undef ENABLE_CONSOLE_MESSAGE
+//------------------------------------------------------------------------------
 
 /*******************************************************************************
  End of File
